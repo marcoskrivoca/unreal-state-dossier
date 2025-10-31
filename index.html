@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>unreal state — slides 0 → 2</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* Slide 3 clean reset: hide decorative overlays, center content, readable type */
+    .slide[data-id="3"] { position:relative; background:#000 !important; }
+    .slide[data-id="3"]::before, .slide[data-id="3"]::after { display:none !important; content:none !important; }
+    .slide[data-id="3"] .bg.bands-soft, .slide[data-id="3"] .bg.grid-soft, .slide[data-id="3"] .pixel-scan-tilt, .slide[data-id="3"] .chroma-wash, .slide[data-id="3"] .wipe, .slide[data-id="3"] .flicker { display:none !important; opacity:0 !important; background:none !important; }
+    .slide[data-id="3"] .center { display:flex; align-items:center; justify-content:center; }
+    .slide[data-id="3"] .concept { max-width:90% !important; padding:12px !important; box-sizing:border-box; position:relative; transform:none !important; }
+    .slide[data-id="3"] .concept .title { font-size:clamp(18px,4vw,28px); color:#cfe1f2; margin:0 0 8px; text-align:left; }
+    .slide[data-id="3"] .concept .body { font-size:clamp(12px,2.2vw,16px); color:#cfe1f2; line-height:1.5; margin:0 0 12px; text-align:left; }
+    .slide[data-id="3"] .btn-row { margin-top:12px; display:flex; gap:12px; justify-content:center; }
+  </style>
+</head>
+<body>
+  <div class="stage">
+    <div class="phone" id="phone">
+      <!-- header ticker (slide 0 only) -->
+      <div class="diag" aria-hidden="true" id="diag"></div>
+
+      <div class="slides" id="slides">
+        <!-- SLIDE 0 -->
+        <section class="slide active" data-id="0">
+          <!-- swapped: use pixel-scan-tilt here (was on slide 1) -->
+          <div class="bg pixel-scan-tilt" aria-hidden="true"></div>
+          <div class="center">
+            <div>
+              <h1 class="title" id="title0"><span class="accent">this is a dossier</span></h1>
+              <div class="btn-row" id="actions0">
+                <button type="button" class="btn agree">i agree</button>
+                <button type="button" class="btn disagree">i disagree</button>
+              </div>
+            </div>
+          </div>
+          <footer class="meta">
+            <p>file thought for cell experience</p>
+            <p>but you can open it wherever you like</p>
+            <p><span>KingCEO Happiness Program</span></p>
+            <p><span>EST. 2025</span></p>
+          </footer>
+        </section>
+        <!-- SLIDE 10: Goodbye / Contact -->
+        <section class="slide" data-id="10" id="slide10" aria-hidden="true">
+          <div class="bg bands-soft" aria-hidden="true"></div>
+          <div class="center">
+            <div class="concept">
+              <h2 class="title">thank you for your interest in</h2>
+              <!-- Ensure the main title is always present & visible on Slide 10 (CSS-only) -->
+              <h1 class="t-main" id="slide10Title">unreal state</h1>
+              <div class="t-by">by marcos krivocapich</div>
+
+              <div class="body" style="margin-top:12px">
+                <p style="margin:8px 0 6px; font-weight:700">Contact information</p>
+                <p style="margin:2px 0">Corrado Russo</p>
+                <p style="margin:2px 0">+39 338 306 0683</p>
+                <p style="margin:2px 0">corrado@mobilitadellearti.it</p>
+              </div>
+
+              <div class="btn-row" style="margin-top:18px">
+                <button class="btn" id="slide10Top" type="button">go back to the top</button>
+                <button class="btn" id="slide10Nice" type="button">take me somewhere nice</button>
+              </div>
+
+              <!-- Slide 10 footer image (place PNG at assets/footer.png) -->
+              <img src="assets/footer.png" alt="unreal state footer" class="slide10-footer" />
+            </div>
+          </div>
+        </section>
+
+        <!-- Slide 4: Game mechanics (replaced the previous map reveal) -->
+        <section class="slide" data-id="4" id="slide4" aria-hidden="true">
+          <div class="center">
+            <div class="concept">
+              <h2 class="title">game mechanics</h2>
+              <h1 class="t-main">game mechanics</h1>
+
+              <div class="body">
+                <p>The experience is designed for up to thirty participants per session. Each player begins from a different point in the city, embodying a unique fictional character inspired by recognizable archetypes such as tenants, developers, tourists, activists, or bureaucrats.</p>
+
+                <p>Each participant follows a path made up of eleven urban scenes, across flexible locations like libraries, schools, plazas, cemeteries, and construction sites. Players move independently, guided by a mobile app that activates content based on their location and decisions. The structure creates the illusion of freedom while subtly revealing a closed system beneath it.</p>
+
+                <p>Although each journey is individual, the experience includes scenes shared with others and synchronized events that affect all participants. Players navigate the city as if playing against the app itself, testing its control.</p>
+
+                <p>In parallel, each carries a printed booklet with optional narrative detours. In the final scene, everyone gathers at a high point in the city where the collective result of their actions is revealed.</p>
+
+                <p>To give you a silly example, choose one:</p>
+              </div>
+
+              <div class="btn-row">
+                <button class="btn" id="siteLibrary">Library</button>
+                <button class="btn" id="siteCemetery">Cemetery</button>
+                <button class="btn" id="siteMuseum">Museum</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- SLIDE 5: Location-specific outcomes (library / cemetery / museum) -->
+        <section class="slide" data-id="5" id="slide5" aria-hidden="true">
+          <div class="bg bands-soft" aria-hidden="true"></div>
+          <div class="center">
+            <div class="concept">
+              <div class="lead-line">
+                <!-- Make the entire lead line a single large button -->
+                <button class="btn lead-btn" id="nearestBtn" type="button">Here, let me guide you to your nearest …</button>
+              </div>
+              <div class="body" id="slide5Body">
+                <!-- populated dynamically -->
+              </div>
+              <div class="btn-row" id="slide5Bottom">
+                <button class="btn" id="readBtn" type="button">read</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- SLIDE 6: Conceptual framework -->
+        <section class="slide" data-id="6" id="slide6" aria-hidden="true">
+          <div class="bg bands-soft" aria-hidden="true"></div>
+          <div class="center">
+            <div class="concept">
+              <h2 class="title">conceptual framework</h2>
+              <div class="body" id="slide6Body">
+                <!-- populated via script.populateSlide6() -->
+              </div>
+              <div class="btn-row">
+                <button class="btn" id="slide6Yes" type="button">yes</button>
+                <button class="btn" id="slide6No" type="button">no</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- SLIDE 7: Glitch + typed question, media placeholder, three choices -->
+        <section class="slide" data-id="7" id="slide7" aria-hidden="true">
+          <div class="bg bands-soft" aria-hidden="true"></div>
+          <div class="center">
+            <div class="concept">
+              <div class="body">
+                <div id="slide7Typed" class="typed"></div>
+              </div>
+
+              <div class="media-placeholder" id="slide7Media" aria-hidden="true"></div>
+
+              <div class="btn-row slide7-actions" style="margin-top:18px">
+                <button class="btn fade-item" id="slide7Btn1" type="button">It’s called progress. Human beings need cars to survive and thrive, and they need places to put their cars to sleep.</button>
+                <button class="btn fade-item" id="slide7Btn2" type="button">Try to find a way to make both things work together. Negotiate, resign some things, get other things.</button>
+                <button class="btn fade-item" id="slide7Btn3" type="button">It’s time for the armed revolution, we have been waiting too long, this was the last straw.</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- SLIDE 8: Team (styled like Slide 4) -->
+        <section class="slide" data-id="8" id="slide8" aria-hidden="true">
+          <div class="bg bands-soft" aria-hidden="true"></div>
+          <div class="center">
+            <div class="concept">
+              <h2 class="title">team</h2>
+              <div class="body" id="slide8Body">
+                <p>unreal state is a project directed by Marcos Krivocapich, a stage and multimedia artist whose work explores hybrid formats that combine theater, technology, and political critique.</p>
+
+                <p>Over the past five years, he has collaborated with Canadian artists Milton Lim and Patrick Blenkarn, known for their interactive and digital performance work. He is currently co-creating a new piece with them, supported by the Canada Council for the Arts.</p>
+
+                <p>This project involves an international team of collaborators from Argentina, Chile, Germany, and Italy, with experience in performing arts, interactive systems, and dramaturgy. The team includes Catalina Lescano (AR), writer and researcher; León Siewert-Langhoff (DE), programmer and dramaturg; Fabián Andrade (CL), designer and game developer; Corrado Russo (IT), international producer; and Carola Zelaschi (AR), composer and sound designer.</p>
+
+                <p>unreal state is supported by Mobilità delle arti (Italy) and has been selected for the production phase of the In Situ network (2025). It will include a residency and co production period with partner institutions and a public presentation of a prototype at FiraTàrrega, Spain, in September 2026.</p>
+              </div>
+
+              <div class="btn-row slide8-actions" style="margin-top:18px">
+                <button class="btn" id="slide8Continue" type="button" style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis">okay, great, but what about the parking lot?</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- SLIDE 1 -->
+        <section class="slide" data-id="1">
+          <!-- swapped: bring bands + codeflow here from slide 0 -->
+          <div class="bg bands" aria-hidden="true"></div>
+          <div class="bg" aria-hidden="true"><div class="codeflow" id="codeflow"></div></div>
+          <div class="center">
+            <div class="title1" id="title1">
+              <div class="t-top" id="tTop">welcome to the</div>
+              <h1 class="t-main" id="tMain">unreal state</h1>
+              <div class="t-by" id="tBy">by marcos krivocapich</div>
+              <div class="btn-row" style="margin-top:28px">
+                <button class="btn start" type="button">start</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- SLIDE 2 -->
+        <section class="slide" data-id="2">
+          <div class="bg bands-soft" aria-hidden="true"></div>
+          <div class="bg grid-soft" aria-hidden="true"></div>
+          <div class="center">
+            <div class="scan">
+              <pre id="scanAll"></pre>
+              <div class="btn-row" style="margin-top:18px">
+                <button class="btn next" id="scanNext" type="button" style="display:none">I'll try</button>
+              </div>
+            </div>
+          </div>
+        </section>
+              <!-- SLIDE 3 -->
+              <section class="slide" data-id="3">
+                <div class="bg bands-soft" aria-hidden="true"></div>
+                <div class="bg grid-soft" aria-hidden="true"></div>
+                <div class="center">
+                  <div class="concept">
+                    <h2 class="title">concept</h2>
+                    <div class="body">
+                      <p class="lead">What if I told you I know what you want before you know it?</p>
+                      <p>unreal state is an immersive urban performance disguised as a role-playing game. Participants move alone through the city as fictional characters, guided by a mobile app that speaks in the voice of the King CEO, an algorithmic figure that claims to know players' desires in advance. The city becomes a game board where common urban spaces such as parks, schools, cemeteries, and construction sites serve as narrative checkpoints.</p>
+                      <p>Along the way, each player receives a printed choose your own adventure booklet, offering analog detours that resist the logic of the system. The story unfolds through individual actions and encounters, but the outcome is revealed collectively in a final scene from a high point in the city, where players see the full map for the first time.</p>
+                      <p>Blending digital control with performative agency, unreal state reflects on how algorithms, speculation, and corporate systems shape contemporary urban life.</p>
+                    </div>
+                    <div class="btn-row" style="margin-top:20px">
+                      <button class="btn external" id="wantLink" type="button">ok, let's see, what do i want?</button>
+                      <button class="btn continue" id="continueDossier" type="button">i want to continue with the dossier</button>
+                    </div>
+                  </div>
+                </div>
+              </section>
+        <!-- SLIDE 9: Final endings populated based on previous choices -->
+        <section class="slide" data-id="9" id="slide9" aria-hidden="true">
+          <div class="bg bands-soft" aria-hidden="true"></div>
+              <div class="center">
+            <div class="concept">
+              <!-- Chat-style ending: messages from the King CEO -->
+              <div class="body">
+                <div class="chat-frame" id="slide9Media" role="log" aria-live="polite">
+                  <ul class="chat-list" id="slide9Chat">
+                    <!-- typing indicator inserted here by JS when needed -->
+                  </ul>
+                </div>
+              </div>
+
+              <div class="btn-row" style="margin-top:12px">
+                <button class="btn" id="slide9Restart" type="button">say goodbye</button>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+  <div class="syslog" id="syslog" role="status" aria-live="polite"></div>
+
+  <script src="script.js" defer></script>
+</body>
+</html>
