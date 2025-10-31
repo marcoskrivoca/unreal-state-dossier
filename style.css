@@ -111,7 +111,7 @@ html,body{height:100%;background:var(--bg);margin:0;color:var(--fg);font-family:
   Increase z-index and enable blend + will-change so the animation reliably shows
   even when other high-specificity rules exist elsewhere in the file. */
 .wipe{position:absolute;inset:0;z-index:1000;pointer-events:none;opacity:0;--edge:var(--cyan);mix-blend-mode:screen;will-change:transform,opacity}
-@keyframes wipeAnim{0%{opacity:1;transform:translateY(-100%)}100%{opacity:0;transform:translateY(100%)}}
+@keyframes wipeAnim{0%{opacity:0.4;transform:translateY(-100%)}40%{opacity:0.3}70%{opacity:0.15}100%{opacity:0;transform:translateY(100%)}}
 .wipe.run{animation:wipeAnim .7s ease forwards}
 .wipe::before{content:"";position:absolute;inset:-2px;background:linear-gradient(to bottom,var(--edge) 0 8px,#ffffff 8px 10px,#e6f2ff 10px 11px,#ffffff 11px 14px);background-repeat:repeat-y;background-size:100% 14px;mix-blend-mode:screen}
 
@@ -310,7 +310,7 @@ html,body{height:100%;background:var(--bg);margin:0;color:var(--fg);font-family:
 .slide[data-id="1"] .codeflow .c3{ color: var(--ylw) }
 .slide[data-id="1"] .codeflow .c0{ color: #7a8a98 }
 .slide[data-id="1"] .codeflow .scroll{ animation: scrollDown 18s linear infinite }
-@keyframes scrollDown{ from{ transform: translateY(-40%) } to{ transform: translateY(0%) } }
+@keyframes scrollDown{ from{ transform: translateY(-50%) } to{ transform: translateY(0%) } }
 
 /* When slide 1 is active, offset the column animations so they render
   near the end-frame (visually at the bottom) immediately without JS. */
@@ -323,11 +323,11 @@ html,body{height:100%;background:var(--bg);margin:0;color:var(--fg);font-family:
 }
 
 /* When slide 1 is active, offset the column animations so they render
-   near the end-frame (visually at the bottom) immediately without JS. */
+   filling the entire screen immediately. */
 .slide[data-id="1"].active .codeflow .scroll{
-  /* match the animation duration exactly to land at the end of the loop */
+  /* start at middle of animation so columns fill the screen */
   animation: scrollDown 18s linear infinite !important;
-  animation-delay: -18s !important;
+  animation-delay: -9s !important;
   animation-play-state: running !important;
   animation-fill-mode: both !important;
 }
