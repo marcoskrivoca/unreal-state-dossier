@@ -903,78 +903,235 @@ html,body{height:100%;background:var(--bg);margin:0;color:var(--fg);font-family:
   .slide[data-id="1"] .codeflow{ padding:16px 12px; }
 }
 
-/* ------------------------- Rebuild Slide 3 (phone-first, readable, no-scroll) ------------------------- */
-.slide[data-id="3"]{ /* ensure slide 3 stays positioned inside the phone frame */
+/* ========================================================================================= */
+/* UNIFIED LAYOUT: Slides 3, 4, 6, 8 (text-heavy concept slides)                            */
+/* Consistent, responsive, no-scroll design with readable type and visible buttons          */
+/* ========================================================================================= */
+
+/* Common container setup for all concept slides */
+.slide[data-id="3"],
+.slide[data-id="4"],
+.slide[data-id="6"],
+.slide[data-id="8"] {
   position: absolute !important;
   inset: 0 !important;
   background: #000 !important;
   z-index: 5 !important;
-}
-.slide[data-id="3"] .center, .slide[data-id="3"] .center.phone{ display:flex !important; align-items:center !important; justify-content:center !important; padding:0 !important }
-.slide[data-id="3"] .center > .concept{
-  width:100%; max-width:94%; box-sizing:border-box; padding:12px; display:flex; flex-direction:column; align-items:stretch;
-  /* let the content size itself while keeping a safe max so it doesn't overflow */
-  height: auto; max-height: calc(100% - 24px); min-height:0; margin:0 auto; background:transparent; z-index:20;
-}
-.slide[data-id="3"] .concept .title{
-  color:#eaf6ff !important; font-weight:700; margin:0 0 8px !important; text-align:left !important;
-  font-size: clamp(16px, 4.8vw, 22px) !important; line-height:1.05 !important;
-}
-.slide[data-id="3"] .concept .t-main{ display:none !important }
-.slide[data-id="3"] .concept .body{
-  color:#dbeff7 !important; font-size: clamp(14px, 3.2vw, 16px) !important; line-height:1.45 !important; margin:0 0 12px !important;
-  width:100%; box-sizing:border-box; padding-right:18px; overflow-wrap:anywhere; word-break:break-word;
-}
-/* Ensure paragraphs have compact spacing so multiple will fit */
-.slide[data-id="3"] .concept .body p{ margin:6px 0 !important }
-.slide[data-id="3"] .concept .btn-row{
-  /* keep buttons directly under the body and visible */
-  margin-top:12px !important; display:flex !important; gap:10px !important; align-items:center !important; justify-content:center !important; z-index:30 !important;
-}
-.slide[data-id="3"] .concept .btn-row .btn{ min-width:110px; height:44px; padding:10px 12px; font-size:14px }
-
-@media (max-width:420px){
-  .slide[data-id="3"] .concept .title{ font-size: clamp(16px, 6.4vw, 22px) !important }
-  .slide[data-id="3"] .concept .body{ font-size: clamp(13px, 4.6vw, 15px) !important; margin:0 0 10px !important }
-  .slide[data-id="3"] .center > .concept{ height: calc(100% - 10px) }
-  .slide[data-id="3"] .concept .btn-row{ flex-direction:column; gap:8px; align-items:stretch }
+  overflow: hidden !important;
 }
 
-
-
-/* ------------------------- Final Slide 4 visual fix (last-resort override) ------------------------- */
-/* High-specificity, appended at EOF so it wins over earlier scattered rules.
-   Restores the title, shows the t-main, expands the body box, and ensures
-   sensible button sizing for phones. This targets slide 4 only and does not
-   touch slide 3. */
-.slide[data-id="4"]{ position:relative !important; background:transparent !important }
-.slide[data-id="4"] .center, .slide[data-id="4"] .center.phone{ display:flex !important; align-items:center !important; justify-content:center !important; padding:0 !important }
-.slide[data-id="4"] .center > .concept{ width:100% !important; max-width:94% !important; box-sizing:border-box !important; padding:12px !important; display:flex !important; flex-direction:column !important; align-items:stretch !important; height: calc(100% - 16px) !important; max-height: calc(100% - 16px) !important; min-height:0 !important; margin:0 auto !important; background:transparent !important; z-index:40 !important; transform:none !important }
-.slide[data-id="4"] .concept .title{ display:block !important; color:#eaf6ff !important; font-size: clamp(18px, 4.0vw, 24px) !important; margin:0 0 8px !important; text-align:left !important }
-.slide[data-id="4"] .concept .t-main{ display:block !important; color:#dbeef7 !important; font-size: clamp(16px, 3.8vw, 22px) !important; margin:0 0 10px !important; text-align:left !important }
-.slide[data-id="4"] .concept .body{ display:block !important; color:#cfe1f2 !important; font-size: clamp(13px, 3.6vw, 16px) !important; line-height:1.45 !important; margin:0 0 12px !important; width:100% !important; box-sizing:border-box !important; padding-right:18px !important; padding-bottom:40px !important; overflow-wrap:anywhere !important; flex:1 1 auto; min-height:0; overflow:auto }
-.slide[data-id="4"] .map-wrap, .slide[data-id="4"] .map-canvas{ max-width:100% !important; width:100% !important }
-.slide[data-id="4"] .concept .btn-row{ /* keep buttons in-flow directly after the body so they appear below the text */
-  margin-top:12px !important;
-  display:flex !important;
-  gap:12px !important;
-  align-items:center !important;
-  justify-content:center !important;
-  z-index:80 !important;
-  /* use relative positioning so the btn-row follows the content flow */
-  position: relative !important;
-  left: auto !important;
-  right: auto !important;
-  bottom: auto !important;
+/* Center container: flex column, start from top with padding */
+.slide[data-id="3"] .center,
+.slide[data-id="4"] .center,
+.slide[data-id="6"] .center,
+.slide[data-id="8"] .center {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  justify-content: flex-start !important;
+  padding: clamp(16px, 4vh, 32px) 0 clamp(12px, 3vh, 20px) 0 !important;
+  height: 100% !important;
+  box-sizing: border-box !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  scrollbar-width: thin !important;
 }
-.slide[data-id="4"] .concept .btn-row .btn{ min-width:140px !important; height:48px !important; padding:10px 14px !important; font-size:15px !important }
 
-@media (max-width:420px){
-  .slide[data-id="4"] .concept .title{ font-size: clamp(18px, 6.4vw, 24px) !important }
-  .slide[data-id="4"] .concept .t-main{ font-size: clamp(16px, 5.6vw, 20px) !important }
-  .slide[data-id="4"] .concept .body{ font-size: clamp(14px, 5.0vw, 16px) !important; padding-bottom:56px !important }
-  .slide[data-id="4"] .concept .btn-row{ position: relative !important; left: auto !important; right: auto !important; bottom: auto !important; display:flex !important; flex-direction:column !important; gap:10px !important; align-items:stretch !important }
+/* Webkit scrollbar styling for smooth UX */
+.slide[data-id="3"] .center::-webkit-scrollbar,
+.slide[data-id="4"] .center::-webkit-scrollbar,
+.slide[data-id="6"] .center::-webkit-scrollbar,
+.slide[data-id="8"] .center::-webkit-scrollbar {
+  width: 4px;
 }
+
+.slide[data-id="3"] .center::-webkit-scrollbar-track,
+.slide[data-id="4"] .center::-webkit-scrollbar-track,
+.slide[data-id="6"] .center::-webkit-scrollbar-track,
+.slide[data-id="8"] .center::-webkit-scrollbar-track {
+  background: rgba(255,255,255,0.02);
+}
+
+.slide[data-id="3"] .center::-webkit-scrollbar-thumb,
+.slide[data-id="4"] .center::-webkit-scrollbar-thumb,
+.slide[data-id="6"] .center::-webkit-scrollbar-thumb,
+.slide[data-id="8"] .center::-webkit-scrollbar-thumb {
+  background: rgba(77,252,255,0.2);
+  border-radius: 2px;
+}
+
+/* Concept card: centered, constrained width, natural height */
+.slide[data-id="3"] .center > .concept,
+.slide[data-id="4"] .center > .concept,
+.slide[data-id="6"] .center > .concept,
+.slide[data-id="8"] .center > .concept {
+  width: 100% !important;
+  max-width: min(92%, 520px) !important;
+  box-sizing: border-box !important;
+  padding: 0 clamp(12px, 3vw, 20px) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: stretch !important;
+  margin: 0 auto !important;
+  background: transparent !important;
+  z-index: 20 !important;
+}
+
+/* Title styling: consistent size, color, spacing */
+.slide[data-id="3"] .concept .title,
+.slide[data-id="4"] .concept .title,
+.slide[data-id="6"] .concept .title,
+.slide[data-id="8"] .concept .title {
+  color: #eaf6ff !important;
+  font-weight: 700 !important;
+  margin: 0 0 clamp(6px, 1.5vh, 10px) !important;
+  text-align: left !important;
+  font-size: clamp(14px, 3.6vw, 20px) !important;
+  line-height: 1.1 !important;
+  letter-spacing: 0.3px !important;
+}
+
+/* Optional t-main subtitle (used in slide 4) */
+.slide[data-id="4"] .concept .t-main {
+  display: none !important;
+}
+
+/* Body text: readable, responsive, with proper line-height */
+.slide[data-id="3"] .concept .body,
+.slide[data-id="4"] .concept .body,
+.slide[data-id="6"] .concept .body,
+.slide[data-id="8"] .concept .body {
+  color: #cfe1f2 !important;
+  font-size: clamp(11px, 2.4vw, 14px) !important;
+  line-height: 1.5 !important;
+  margin: 0 0 clamp(10px, 2vh, 14px) !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  overflow-wrap: break-word !important;
+  word-break: break-word !important;
+  text-align: left !important;
+}
+
+/* Paragraph spacing: compact but readable */
+.slide[data-id="3"] .concept .body p,
+.slide[data-id="4"] .concept .body p,
+.slide[data-id="6"] .concept .body p,
+.slide[data-id="8"] .concept .body p {
+  margin: clamp(4px, 1vh, 6px) 0 !important;
+}
+
+/* Lead paragraph (slide 3) gets slightly more weight */
+.slide[data-id="3"] .concept .body p.lead {
+  font-weight: 600 !important;
+  color: #e6f2ff !important;
+  margin-bottom: clamp(6px, 1.5vh, 8px) !important;
+}
+
+/* Button row: centered, responsive gap, proper spacing from content */
+.slide[data-id="3"] .concept .btn-row,
+.slide[data-id="4"] .concept .btn-row,
+.slide[data-id="6"] .concept .btn-row,
+.slide[data-id="8"] .concept .btn-row {
+  margin-top: clamp(12px, 2.5vh, 18px) !important;
+  display: flex !important;
+  gap: clamp(8px, 2vw, 12px) !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex-wrap: wrap !important;
+  z-index: 30 !important;
+  width: 100% !important;
+}
+
+/* Button styling: touch-friendly, readable */
+.slide[data-id="3"] .concept .btn-row .btn,
+.slide[data-id="4"] .concept .btn-row .btn,
+.slide[data-id="6"] .concept .btn-row .btn,
+.slide[data-id="8"] .concept .btn-row .btn {
+  flex: 1 1 auto !important;
+  min-width: min(40%, 140px) !important;
+  max-width: 100% !important;
+  height: auto !important;
+  min-height: 44px !important;
+  padding: clamp(10px, 2vh, 14px) clamp(12px, 3vw, 16px) !important;
+  font-size: clamp(12px, 2.6vw, 14px) !important;
+  line-height: 1.2 !important;
+  box-sizing: border-box !important;
+  white-space: normal !important;
+  overflow-wrap: break-word !important;
+  word-break: break-word !important;
+  text-align: center !important;
+}
+
+/* Mobile optimization: stack buttons vertically on narrow screens */
+@media (max-width: 420px) {
+  .slide[data-id="3"] .concept .btn-row,
+  .slide[data-id="4"] .concept .btn-row,
+  .slide[data-id="6"] .concept .btn-row,
+  .slide[data-id="8"] .concept .btn-row {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: clamp(8px, 1.5vh, 10px) !important;
+  }
+  
+  .slide[data-id="3"] .concept .btn-row .btn,
+  .slide[data-id="4"] .concept .btn-row .btn,
+  .slide[data-id="6"] .concept .btn-row .btn,
+  .slide[data-id="8"] .concept .btn-row .btn {
+    width: 100% !important;
+    min-width: 0 !important;
+    flex: 1 1 auto !important;
+  }
+}
+
+/* Very small screens: reduce padding and font sizes further */
+@media (max-height: 600px) {
+  .slide[data-id="3"] .center,
+  .slide[data-id="4"] .center,
+  .slide[data-id="6"] .center,
+  .slide[data-id="8"] .center {
+    padding: 12px 0 8px 0 !important;
+  }
+  
+  .slide[data-id="3"] .concept .title,
+  .slide[data-id="4"] .concept .title,
+  .slide[data-id="6"] .concept .title,
+  .slide[data-id="8"] .concept .title {
+    font-size: clamp(13px, 3.2vw, 18px) !important;
+    margin-bottom: 4px !important;
+  }
+  
+  .slide[data-id="3"] .concept .body,
+  .slide[data-id="4"] .concept .body,
+  .slide[data-id="6"] .concept .body,
+  .slide[data-id="8"] .concept .body {
+    font-size: clamp(10px, 2.2vw, 13px) !important;
+    line-height: 1.4 !important;
+    margin-bottom: 8px !important;
+  }
+  
+  .slide[data-id="3"] .concept .body p,
+  .slide[data-id="4"] .concept .body p,
+  .slide[data-id="6"] .concept .body p,
+  .slide[data-id="8"] .concept .body p {
+    margin: 3px 0 !important;
+  }
+  
+  .slide[data-id="3"] .concept .btn-row,
+  .slide[data-id="4"] .concept .btn-row,
+  .slide[data-id="6"] .concept .btn-row,
+  .slide[data-id="8"] .concept .btn-row {
+    margin-top: 8px !important;
+    gap: 6px !important;
+  }
+}
+
+/* ========================================================================================= */
+/* END UNIFIED LAYOUT                                                                        */
+/* ========================================================================================= */
+
+
+
+/* Slide 4 specifics removed - now handled by unified layout above */
 
 /* Persistent safety: ensure Slide 3 active content is always visible and
    not occluded by blend modes, filters, or z-index races. This is scoped
@@ -1142,108 +1299,9 @@ html,body{height:100%;background:var(--bg);margin:0;color:var(--fg);font-family:
   .slide[data-id="6"] .btn-row .btn{ width:100% !important; min-width:0 !important }
 }
 
-/* Make Slide 6 visually match Slide 3: same concept card sizing, title/body scale,
-   and button rhythm (phone-first, no inner scroll). Appended as a focused override
-   so it wins over scattered earlier rules while we finalize consolidation. */
-.slide[data-id="6"] .center > .concept{
-  width:100% !important;
-  max-width:94% !important;
-  box-sizing:border-box !important;
-  padding:12px !important;
-  display:flex !important;
-  flex-direction:column !important;
-  align-items:stretch !important;
-  height:auto !important;
-  max-height: calc(100% - 24px) !important;
-  min-height:0 !important;
-  background:transparent !important;
-  z-index:20 !important;
-}
-.slide[data-id="6"] .concept .title{
-  color:#eaf6ff !important;
-  font-weight:700 !important;
-  margin:0 0 8px !important;
-  text-align:left !important;
-  font-size: clamp(16px, 4.8vw, 22px) !important;
-  line-height:1.05 !important;
-}
-.slide[data-id="6"] .concept .body{
-  color:#dbeff7 !important;
-  font-size: clamp(14px, 3.2vw, 16px) !important;
-  line-height:1.45 !important;
-  margin:0 0 12px !important;
-  width:100% !important;
-  padding-right:18px !important;
-  overflow-wrap:anywhere !important;
-  word-break:break-word !important;
-}
-@media (max-width:420px){
-  .slide[data-id="6"] .concept .title{ font-size: clamp(16px, 6.4vw, 22px) !important }
-  .slide[data-id="6"] .concept .body{ font-size: clamp(13px, 4.6vw, 15px) !important; margin:0 0 10px !important }
-  .slide[data-id="6"] .center > .concept{ height: calc(100% - 10px) !important }
-  .slide[data-id="6"] .concept .btn-row{ flex-direction:column !important; gap:8px !important; align-items:stretch !important }
-}
+/* Slide 6 specifics removed - now handled by unified layout above */
 
-/* ------------------------- Slide 8 parity (match slides 3/4/6) ------------------------- */
-.slide[data-id="8"]{ position:absolute !important; inset:0 !important; z-index:5 !important }
-.slide[data-id="8"] .center{
-  display:flex !important;
-  flex-direction:column !important;
-  align-items:flex-start !important;
-  justify-content:flex-start !important;
-  align-self:start !important;
-  min-height:0 !important;
-  height:100% !important;
-  padding-top: clamp(20px, 8vh, 64px) !important;
-  box-sizing: border-box !important;
-}
-.slide[data-id="8"] .center > .concept{
-  width:100% !important;
-  max-width:94% !important;
-  box-sizing:border-box !important;
-  padding:12px !important;
-  display:flex !important;
-  flex-direction:column !important;
-  align-items:stretch !important;
-  height:auto !important;
-  max-height: calc(100% - 24px) !important;
-  min-height:0 !important;
-  background:transparent !important;
-  z-index:20 !important;
-}
-.slide[data-id="8"] .concept .title{
-  color:#eaf6ff !important;
-  font-weight:700 !important;
-  margin:0 0 8px !important;
-  text-align:left !important;
-  font-size: clamp(16px, 4.8vw, 22px) !important;
-  line-height:1.05 !important;
-}
-.slide[data-id="8"] .concept .body{
-  color:#dbeff7 !important;
-  font-size: clamp(14px, 3.2vw, 16px) !important;
-  line-height:1.45 !important;
-  margin:0 0 12px !important;
-  width:100% !important;
-  padding-right:18px !important;
-  overflow-wrap:anywhere !important;
-  word-break:break-word !important;
-}
-.slide[data-id="8"] .concept .btn-row{
-  margin-top:12px !important;
-  display:flex !important;
-  gap:10px !important;
-  align-items:center !important;
-  justify-content:center !important;
-  position:relative !important;
-  z-index:30 !important;
-}
-@media (max-width:420px){
-  .slide[data-id="8"] .concept .title{ font-size: clamp(16px, 6.4vw, 22px) !important }
-  .slide[data-id="8"] .concept .body{ font-size: clamp(13px, 4.6vw, 15px) !important; margin:0 0 10px !important }
-  .slide[data-id="8"] .center > .concept{ height: calc(100% - 10px) !important }
-  .slide[data-id="8"] .concept .btn-row{ flex-direction:column !important; gap:8px !important; align-items:stretch !important }
-}
+/* Slide 8 specifics removed - now handled by unified layout above */
 
 /* ------------------------- Slide 5: center everything & bigger main text ------------------------- */
 .slide[data-id="5"] .center{
