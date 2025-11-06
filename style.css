@@ -41,6 +41,119 @@ html,body{height:100%;background:var(--bg);margin:0;color:var(--fg);font-family:
 .stage{position:fixed;inset:0;display:grid;place-items:center;overflow:hidden}
 .phone{position:relative;width:min(100vw,calc(100vh*9/16));height:min(100vh,calc(100vw*16/9));aspect-ratio:9/16;background:#000;border:1px solid #141414;border-radius:16px;box-shadow:0 0 0 2px #0a0a0a,0 20px 80px rgba(0,0,0,.8);overflow:hidden;isolation:isolate}
 
+/* Language selection slide - black background, no grid */
+.lang-slide {
+  background: #000 !important;
+}
+
+/* Hide grid background on language slide */
+.lang-slide::before {
+  display: none !important;
+  opacity: 0 !important;
+}
+
+.lang-slide .bg {
+  display: none !important;
+  opacity: 0 !important;
+}
+
+/* Ensure language slide is visible when active */
+.lang-slide.active {
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  transform: none !important;
+}
+
+/* Disable all animations on language slide content */
+.lang-slide .center *,
+.lang-slide > *:not(.lang-footer) {
+  animation: none !important;
+  text-shadow: none !important;
+  filter: none !important;
+  transform: none !important;
+}
+
+.lang-btn {
+  font-size: 20px !important;
+  padding: 20px 60px !important;
+  min-width: 240px;
+  background: transparent !important;
+  border: 2px solid var(--cyan) !important;
+  color: var(--cyan) !important;
+  transition: all 0.3s ease !important;
+  box-shadow: 
+    0 0 10px rgba(77, 252, 255, 0.3),
+    0 0 20px rgba(77, 252, 255, 0.2),
+    inset 0 0 10px rgba(77, 252, 255, 0.1) !important;
+}
+
+.lang-btn:hover {
+  background: var(--cyan) !important;
+  color: #000 !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 
+    0 0 20px rgba(77, 252, 255, 0.6),
+    0 0 40px rgba(77, 252, 255, 0.4),
+    0 0 60px rgba(77, 252, 255, 0.2),
+    inset 0 0 20px rgba(77, 252, 255, 0.3) !important;
+}
+
+/* Language selection transition - exaggerated startup boot effect */
+@keyframes langFadeOut {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+    filter: brightness(1) contrast(1);
+  }
+  40% {
+    opacity: 0.6;
+    transform: scale(1.05);
+    filter: brightness(1.5) contrast(1.2);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.15);
+    filter: brightness(3) contrast(0.5);
+  }
+}
+
+@keyframes langSlideIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.9);
+    filter: brightness(0) contrast(1);
+  }
+  20% {
+    opacity: 0;
+    filter: brightness(0.2) contrast(1.5);
+  }
+  40% {
+    opacity: 0.3;
+    filter: brightness(2) contrast(1.3);
+  }
+  60% {
+    opacity: 0.7;
+    filter: brightness(1.5) contrast(1.1);
+  }
+  80% {
+    opacity: 0.9;
+    filter: brightness(0.95) contrast(1.05);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+    filter: brightness(1) contrast(1);
+  }
+}
+
+.lang-slide.lang-exit {
+  animation: langFadeOut 0.7s ease-out forwards;
+}
+
+.slide.lang-enter {
+  animation: langSlideIn 1.4s cubic-bezier(0.2, 0.9, 0.3, 1) forwards;
+}
+
 /* header ticker (slide 0 only) */
 .diag{position:absolute;top:0;left:0;right:0;height:28px;display:block;font-size:12px;color:#a7b3c2;background:linear-gradient(#030303,#000);border-bottom:1px solid #0c0c0c;z-index:5;overflow:hidden;white-space:nowrap}
 
@@ -86,7 +199,7 @@ html,body{height:100%;background:var(--bg);margin:0;color:var(--fg);font-family:
   .slide[data-id="0"] .title{font-size:clamp(16px,3.6vw,28px)}
 }
 .btn-row{display:flex;gap:12px;align-items:center;justify-content:center;margin:22px auto 0}
-.btn{cursor:pointer;text-transform:lowercase;letter-spacing:.3px;font-weight:700;font-size:16px;padding:14px 18px;border-radius:10px;border:1px solid #222;color:#e6f2ff;background:#000;transition:transform .12s ease, box-shadow .15s ease}
+.btn{cursor:pointer;text-transform:lowercase;letter-spacing:.3px;font-weight:700;font-size:16px;padding:14px 18px;border-radius:10px;border:1px solid #222;color:#e6f2ff;background:transparent !important;transition:transform .12s ease, box-shadow .15s ease;position:relative;z-index:200 !important}
 .btn:hover{transform:translateY(-1px)}
 .btn.agree{
   /* add cyan inset + soft outer glow to match the disagree magenta glow */
@@ -143,7 +256,7 @@ html,body{height:100%;background:var(--bg);margin:0;color:var(--fg);font-family:
 /* Tighten the clamp for the slide-1 main title so it fits typical phone widths */
 /* Tighten title size further to ensure it fits on small phone widths */
 .slide[data-id="1"] .t-main{display:block;white-space:nowrap;max-width:100%}
-.btn.start{opacity:0; transform:translateY(6px); background:#fff; color:#000; border:1px solid #fff}
+.btn.start{opacity:0; transform:translateY(6px); background:#fff !important; color:#000; border:1px solid #fff}
 
 @keyframes topIn{from{opacity:0}to{opacity:1}}
 @keyframes byIn{from{opacity:0}to{opacity:1}}
@@ -202,18 +315,20 @@ html,body{height:100%;background:var(--bg);margin:0;color:var(--fg);font-family:
 /* Use transform (scaleY) for the load animation so we can fade out via opacity only
   without collapsing the visual height. The base height fills the available area. */
 .scan .scan-loader{
-  position:absolute;
-  width:4px;
-  background:linear-gradient(180deg,var(--cyan),var(--mag));
-  /* span from top to bottom so the visual grows upward via scaleY */
-  top:6px; bottom:6px; height:auto;
-  /* ensure the transform origin is exactly the bottom center (explicit coordinates) */
+  position:fixed;
+  width:6px;
+  background:linear-gradient(0deg,var(--cyan),var(--mag));  /* reversed gradient for bottom-up */
+  /* span full height from top to bottom edge-to-edge of the phone */
+  top:0; bottom:0; height:100%;
+  /* transform origin at bottom so animation grows upward from the bottom */
   transform-origin:50% 100%;
   transform:scaleY(0);
   will-change: transform, opacity;
+  opacity:0.85;
+  z-index:100;
 }
-.scan .scan-loader.left{ left:2px }
-.scan .scan-loader.right{ right:2px; left:auto }
+.scan .scan-loader.left{ left:0 }
+.scan .scan-loader.right{ right:0; left:auto }
 .scan .scan-loader.play{animation:scanLoadV linear forwards}
 @keyframes scanLoadV{from{transform:scaleY(0)} to{transform:scaleY(1)}}
 /* hold/pulse state for loaders when typing completes — only use transform/opacity, do not change height */
@@ -300,7 +415,7 @@ html,body{height:100%;background:var(--bg);margin:0;color:var(--fg);font-family:
   z-index: 1;
 }
 .slide[data-id="1"] .codeflow pre{
-  margin: 0; height: 140%; min-height:140%; overflow: hidden; font-size: 10px; line-height:1.1; white-space: pre; opacity: 0.9; align-self: stretch;
+  margin: 0; height: 200%; min-height:200%; overflow: hidden; font-size: 10px; line-height:1.1; white-space: pre; opacity: 0.9; align-self: stretch;
 }
 /* per-column chromatic colors and scroll animation (restored from backup)
    pre elements get classes c0..c3 when populated by JS so colorization
@@ -325,9 +440,9 @@ html,body{height:100%;background:var(--bg);margin:0;color:var(--fg);font-family:
 /* When slide 1 is active, offset the column animations so they render
    filling the entire screen immediately. */
 .slide[data-id="1"].active .codeflow .scroll{
-  /* start at middle of animation so columns fill the screen */
+  /* start near end of animation so columns are visible from bottom */
   animation: scrollDown 18s linear infinite !important;
-  animation-delay: -9s !important;
+  animation-delay: -16s !important;
   animation-play-state: running !important;
   animation-fill-mode: both !important;
 }
@@ -455,7 +570,7 @@ html,body{height:100%;background:var(--bg);margin:0;color:var(--fg);font-family:
   sits visually lower on the phone. */
 .slide[data-id="2"] .scan{ padding-bottom:88px !important }
 .slide[data-id="2"] .scan pre{ margin-bottom:72px !important }
-.slide[data-id="2"] .scan .btn-row{ position:absolute; left:0; right:0; bottom:18px; justify-content:center; z-index:6 }
+.slide[data-id="2"] .scan .btn-row{ position:absolute; left:0; right:0; bottom:32px; justify-content:center; z-index:6 }
 
 /* By default, keep scan text starting at the top (natural flow). */
 .slide[data-id="2"] .scan{ justify-content: flex-start !important }
@@ -591,14 +706,30 @@ html,body{height:100%;background:var(--bg);margin:0;color:var(--fg);font-family:
 
 /* Make Slide 4 title + body match Slide 3 sizing and rhythm */
 .slide[data-id="4"] .concept .t-main,
-.slide[data-id="4"] .concept .title { font-size: clamp(15px, 2.6vw, 20px); text-align:left; margin:0 0 6px }
+.slide[data-id="4"] .concept .title { 
+  font-size: clamp(15px, 2.6vw, 20px); 
+  text-align:left; 
+  margin:0 0 6px;
+  text-shadow: 
+    -1px 0 var(--cyan), 
+    1px 0 var(--mag),
+    0 0 12px rgba(77, 252, 255, 0.3) !important;
+}
 .slide[data-id="4"] .concept .body { font-size: clamp(9px, 1.0vw, 10px); line-height:1.38; margin:0 0 12px; box-sizing:border-box; padding-right:32px; max-width:none; overflow-wrap:break-word; text-align:left }
 
 /* Slide 6: match Slide 3/4 rhythm and in-flow buttons */
 .slide[data-id="6"]{ position:absolute !important; inset:0 !important; z-index:5 !important }
 .slide[data-id="6"] .center{ align-items:flex-start; /* anchor content toward top like slides 3/4 */ padding-top: clamp(20px, 8vh, 64px); box-sizing:border-box }
 .slide[data-id="6"] .concept{ max-width:96%; display:flex; flex-direction:column; align-items:flex-start; height:auto; padding:8px 12px; box-sizing:border-box; position:relative; z-index:3; margin:0 auto }
-.slide[data-id="6"] .concept .title{ font-size: clamp(16px, 3.0vw, 22px); text-align:left; margin:0 0 6px }
+.slide[data-id="6"] .concept .title{ 
+  font-size: clamp(16px, 3.0vw, 22px); 
+  text-align:left; 
+  margin:0 0 6px;
+  text-shadow: 
+    -1px 0 var(--cyan), 
+    1px 0 var(--mag),
+    0 0 12px rgba(77, 252, 255, 0.3) !important;
+}
 .slide[data-id="6"] .concept .body{
   color:#cfe1f2;
   /* Larger body type for Slide 6 — keep generous clamp but allow natural flow. */
@@ -634,10 +765,25 @@ html,body{height:100%;background:var(--bg);margin:0;color:var(--fg);font-family:
 .section-loader .loader-text{ color:var(--fg); font-size:13px; opacity:0.95; max-width:calc(100% - 48px); margin-left:8px; text-align:center; word-break:break-word }
 @keyframes spin{ from{ transform:rotate(0deg) } to{ transform:rotate(360deg) } }
 
-/* typing highlight colors */
-.typing-cyan{ color: var(--cyan); text-shadow:0 0 12px rgba(77,252,255,0.28) }
-.typing-mag{ color: var(--mag); text-shadow:0 0 12px rgba(255,88,246,0.24) }
-.typing-ylw{ color: var(--ylw); text-shadow:0 0 8px rgba(255,228,77,0.18) }
+/* typing highlight colors - enhanced for visibility across all slides */
+.typing-cyan{ 
+  color: var(--cyan) !important; 
+  text-shadow: 0 0 12px rgba(77,252,255,0.5), 0 0 6px rgba(77,252,255,0.3) !important;
+  font-weight: 600;
+}
+.typing-mag{ 
+  color: var(--mag) !important; 
+  text-shadow: 0 0 12px rgba(255,88,246,0.45), 0 0 6px rgba(255,88,246,0.28) !important;
+  font-weight: 600;
+}
+.typing-ylw{ 
+  color: var(--ylw) !important; 
+  text-shadow: 0 0 12px rgba(255,228,77,0.4), 0 0 6px rgba(255,228,77,0.22) !important;
+  font-weight: 600;
+}
+
+/* Global text glow effect inspired by slide 2 - applies subtle chromatic shadow to important text */
+.typing-glow, .glow-text{ text-shadow:0 0 8px rgba(230,242,255,.45), 0 0 12px rgba(77,252,255,.25) }
 
 /* --- Force parity: make Slide 3/4/6 title + body positions identical --- */
 /* This block ensures Slide 3, Slide 4 and Slide 6 share the same top offsets,
@@ -712,20 +858,15 @@ html,body{height:100%;background:var(--bg);margin:0;color:var(--fg);font-family:
   position:relative; display:flex; gap:8px; align-items:center; justify-content:center; margin-top:8px; z-index:6
 }
 
-/* Remove faint rim/overlay above the concept card on slides 3 & 6 so the
-   title sits flush (matches slide 4). This disables the decorative ::before
-   overlay and any subtle grid background that created the white line. */
-.slide[data-id="3"]::before,
-.slide[data-id="6"]::before,
-.slide[data-id="3"] .bg.grid-soft,
-.slide[data-id="6"] .bg.grid-soft {
+/* Remove faint rim/overlay above the concept card on slide 3 so the
+   title sits flush (matches slide 4). This disables the decorative 
+   .bg.grid-soft overlay but keeps the global ::before grid and ::after scan. */
+.slide[data-id="3"] .bg.grid-soft {
   opacity: 0 !important;
   background: none !important;
 }
 .slide[data-id="3"] .center,
-.slide[data-id="6"] .center,
-.slide[data-id="3"] .concept,
-.slide[data-id="6"] .concept {
+.slide[data-id="3"] .concept {
   background: transparent !important;
   box-shadow: none !important;
   border-top: none !important;
@@ -1156,9 +1297,7 @@ html,body{height:100%;background:var(--bg);margin:0;color:var(--fg);font-family:
   z-index: 100000 !important;
 }
 
-/* Also ensure any pseudo-elements inside the phone or slide don't obscure content */
-.slide[data-id="3"].active::before,
-.slide[data-id="3"].active::after,
+/* Ensure phone pseudo-elements don't obscure content, but allow slide 3's scan line */
 .phone::before,
 .phone::after{
   display: none !important;
@@ -1587,42 +1726,81 @@ html,body{height:100%;background:var(--bg);margin:0;color:var(--fg);font-family:
   flex-direction:column !important;
   align-items:stretch !important;
   box-sizing: border-box !important;
-  padding: 8px 8px 120px 8px !important; /* reserve bottom space for button */
+  padding: 12px 10px 120px 10px !important; /* reserve bottom space for button */
   max-height: calc(100% - 48px) !important;
+  background: radial-gradient(ellipse at center, rgba(77,252,255,0.02) 0%, transparent 70%) !important;
 }
 
 .slide[data-id="9"] .chat-list{
   display:flex !important;
   flex-direction:column !important;
-  gap:12px !important;
-  padding:8px !important;
+  gap:16px !important;
+  padding:10px !important;
   box-sizing:border-box !important;
   margin-top: auto !important; /* push list toward bottom when space exists */
-  transition: margin-top .42s cubic-bezier(.2,.9,.2,1) !important;
+  transition: margin-top .5s cubic-bezier(.2,.9,.2,1) !important;
   will-change: margin-top !important;
 }
 
-/* bubbles: readable white text, subtle CRT glow, pop-in on reveal */
+/* Smooth upward shift for existing messages when new ones appear */
+.slide[data-id="9"] .msg{
+  transition: transform .38s cubic-bezier(.2,.9,.2,1) !important;
+}
+
+/* bubbles: readable text with enhanced CRT aesthetic and chromatic shadows */
 .slide[data-id="9"] .bubble{
-  background: linear-gradient(180deg, rgba(77,252,255,0.14), rgba(77,252,255,0.08)) !important;
+  background: linear-gradient(135deg, rgba(77,252,255,0.08), rgba(77,252,255,0.04)) !important;
   color: #ffffff !important;
-  padding: 12px 14px !important;
-  border-radius: 16px !important;
-  font-size: clamp(13px, 3.2vw, 18px) !important;
-  line-height: 1.4 !important;
-  max-width: 84% !important;
-  box-shadow: 0 10px 26px rgba(2,8,12,0.32), 0 4px 18px rgba(77,252,255,0.06) !important;
+  padding: 14px 16px !important;
+  border-radius: 18px !important;
+  font-size: clamp(13px, 3.2vw, 17px) !important;
+  line-height: 1.5 !important;
+  max-width: 80% !important;
+  border: 1px solid rgba(77,252,255,0.12) !important;
+  box-shadow: 
+    0 0 0 1px rgba(77,252,255,0.08) inset,
+    0 8px 24px rgba(0,0,0,0.4),
+    0 2px 12px rgba(77,252,255,0.08) !important;
+  text-shadow: 
+    -0.5px 0 rgba(77,252,255,0.3),
+    0.5px 0 rgba(255,88,246,0.2),
+    0 0.5px rgba(255,228,77,0.15) !important;
   white-space: pre-wrap !important;
   word-break: break-word !important;
   overflow-wrap: anywhere !important;
-  transition: box-shadow .24s ease, transform .18s ease !important;
+  backdrop-filter: blur(8px) !important;
+  transition: box-shadow .24s ease, transform .18s ease, border-color .24s ease !important;
 }
-.slide[data-id="9"] .msg.me .bubble{ background: var(--cyan) !important; color:#021014 !important }
-.slide[data-id="9"] .msg.other .bubble{ background: rgba(255,255,255,0.04) !important; color:var(--fg) !important }
+.slide[data-id="9"] .msg.me .bubble{ 
+  background: linear-gradient(135deg, var(--cyan), rgba(77,252,255,0.85)) !important; 
+  color:#021014 !important;
+  border-color: rgba(77,252,255,0.4) !important;
+  text-shadow: none !important;
+  box-shadow: 
+    0 0 0 1px rgba(255,255,255,0.2) inset,
+    0 10px 28px rgba(77,252,255,0.25),
+    0 4px 14px rgba(0,0,0,0.3) !important;
+}
+.slide[data-id="9"] .msg.other .bubble{ 
+  background: linear-gradient(135deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02)) !important; 
+  color:#e8f4ff !important;
+  border-color: rgba(188,211,230,0.08) !important;
+}
 
-/* reveal + motion */
-.slide[data-id="9"] .bubble{ opacity:0; transform: translateY(6px); transition: opacity .22s ease, transform .22s cubic-bezier(.2,.9,.2,1) }
-.slide[data-id="9"] .bubble.visible{ opacity:1; transform:none; animation: popIn .28s cubic-bezier(.2,.9,.2,1) both }
+/* reveal + motion: messages slide up from bottom like real chat */
+.slide[data-id="9"] .bubble{ opacity:0; transform: translateY(20px); transition: opacity .32s ease, transform .38s cubic-bezier(.2,.9,.2,1) }
+.slide[data-id="9"] .bubble.visible{ opacity:1; transform: translateY(0); animation: slideUpChat .38s cubic-bezier(.2,.9,.2,1) both }
+
+@keyframes slideUpChat {
+  0% {
+    opacity: 0;
+    transform: translateY(20px) scale(0.96);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
 
 /* actionable button: absolute so it never reflows messages; use small translateY
    so initial state doesn't overlap message when fading in. JS toggles
@@ -1636,12 +1814,13 @@ html,body{height:100%;background:var(--bg);margin:0;color:var(--fg);font-family:
   gap:10px !important;
   justify-content:center !important;
   width: min(92%, 360px) !important;
-  z-index: 120 !important;
+  z-index: 250 !important;
   opacity: 0 !important;
   pointer-events: none !important;
   transition: opacity .28s ease, transform .28s cubic-bezier(.2,.9,.2,1) !important;
+  visibility: hidden !important;
 }
-.slide[data-id="9"].messages-done .btn-row.show{ opacity:1 !important; pointer-events: auto !important; transform:translateX(-50%) translateY(0) !important }
+.slide[data-id="9"].messages-done .btn-row.show{ opacity:1 !important; pointer-events: auto !important; transform:translateX(-50%) translateY(0) !important; visibility: visible !important }
 
 /* small accessibility helpers: ensure the chat area is readable for assistive tech */
 .slide[data-id="9"] .chat-frame[aria-hidden="true"]{ opacity:0.999 !important }
@@ -1651,11 +1830,13 @@ html,body{height:100%;background:var(--bg);margin:0;color:var(--fg);font-family:
 
 
 /* ------------------------------------------------------------------ */
-/* Apply Slide 2 background visuals to all slides (global parity)       */
+/* Apply Slide 2 aesthetic globally (inspired by the scan interface)    */
 /* This makes the soft bands and subtle grid used on slide 2 available
    on every slide by default. Individual slides may still opt-out or
    override by using a more specific selector (e.g. `.slide[data-id="X"]
    .bg.bands-soft { opacity: 0 !important }`). */
+
+/* Slide 2-inspired grid background - applies to all slides */
 .slide .bg.bands-soft{
   /* same visual presence as slide 2 */
   opacity: 0.12 !important;
@@ -1667,6 +1848,117 @@ html,body{height:100%;background:var(--bg);margin:0;color:var(--fg);font-family:
     repeating-linear-gradient(0deg, rgba(188,211,230,.25) 0 1px, transparent 1px 12px),
     repeating-linear-gradient(90deg, rgba(188,211,230,.14) 0 1px, transparent 1px 12px) !important;
   mix-blend-mode: screen !important;
+}
+
+/* Apply slide 2's chromatic text shadow to all body text across slides for consistency */
+.slide .concept .body,
+.slide .concept .title,
+.slide p,
+.slide h1,
+.slide h2,
+.slide .typed{
+  text-shadow: -0.4px 0 var(--cyan), 0.4px 0 var(--mag) !important;
+}
+
+/* Stronger glow for emphasized text elements */
+.slide .concept .body p.lead,
+.slide .t-main,
+.slide .title .accent{
+  text-shadow: -0.6px 0 var(--cyan), 0.6px 0 var(--mag), 0 0 8px rgba(230,242,255,.35) !important;
+}
+
+/* Ensure grid background is visible on ALL slides with enhanced glow */
+.slide::before{
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.06;
+  background-image:
+    repeating-linear-gradient(0deg, rgba(188,211,230,.45) 0 1px, transparent 1px 12px),
+    repeating-linear-gradient(90deg, rgba(188,211,230,.3) 0 1px, transparent 1px 12px);
+  mix-blend-mode: screen;
+  filter: 
+    drop-shadow(0 0 1px rgba(77, 252, 255, 0.3)) 
+    drop-shadow(0 0 2px rgba(188, 211, 230, 0.2))
+    drop-shadow(0 0 3px rgba(77, 252, 255, 0.15));
+}
+
+/* Remove scan line - no longer needed */
+.slide::after{
+  display: none !important;
+  content: none !important;
+}
+
+/* Apply subtle glitch effect to all slide content (not backgrounds) */
+/* This creates a chromatic aberration every 20 seconds on all slides except language selection */
+.slide:not(.lang-slide) > *:not(.bg) {
+  position: relative;
+  z-index: 2;
+  animation: glitchContent 20s linear infinite;
+}
+
+/* Disable glitch on language selection slide */
+.lang-slide > *,
+.lang-slide .center,
+.lang-slide .center * {
+  animation: none !important;
+}
+
+/* Glitch with chromatic aberration only - no clipping for readability */
+@keyframes glitchContent {
+  0%, 90% {
+    transform: translateX(0);
+    text-shadow: none;
+    filter: none;
+  }
+  
+  91% {
+    transform: translateX(2px);
+    text-shadow: 
+      -2px 0 0 rgba(77, 252, 255, 0.7),
+      2px 0 0 rgba(255, 88, 246, 0.7);
+    filter: 
+      drop-shadow(-2px 0 0 rgba(77, 252, 255, 0.5))
+      drop-shadow(2px 0 0 rgba(255, 88, 246, 0.5));
+  }
+  
+  92.5% {
+    transform: translateX(-3px);
+    text-shadow: 
+      -3px 0 0 rgba(77, 252, 255, 0.9),
+      3px 0 0 rgba(255, 88, 246, 0.9);
+    filter: 
+      drop-shadow(-3px 0 0 rgba(77, 252, 255, 0.7))
+      drop-shadow(3px 0 0 rgba(255, 88, 246, 0.7));
+  }
+  
+  94% {
+    transform: translateX(4px);
+    text-shadow: 
+      -4px 0 0 rgba(77, 252, 255, 1),
+      4px 0 0 rgba(255, 228, 77, 1);
+    filter: 
+      drop-shadow(-4px 0 0 rgba(77, 252, 255, 0.8))
+      drop-shadow(4px 0 0 rgba(255, 228, 77, 0.8));
+  }
+  
+  95.5% {
+    transform: translateX(-2px);
+    text-shadow: 
+      -2px 0 0 rgba(255, 88, 246, 0.7),
+      2px 0 0 rgba(77, 252, 255, 0.7);
+    filter: 
+      drop-shadow(-2px 0 0 rgba(255, 88, 246, 0.5))
+      drop-shadow(2px 0 0 rgba(77, 252, 255, 0.5));
+  }
+  
+  97%, 100% {
+    transform: translateX(0);
+    text-shadow: none;
+    filter: none;
+  }
 }
 
 

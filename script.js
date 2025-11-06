@@ -1,4 +1,4 @@
-// --- STATE ---
+﻿// --- STATE ---
 const state = { choice0: localStorage.getItem('choice0') || null };
 const phone  = document.getElementById('phone');
 const slidesWrap = document.getElementById('slides');
@@ -13,14 +13,14 @@ const slidesWrap = document.getElementById('slides');
   const int=(a,b)=>Math.floor(a+Math.random()*(b-a+1));
   const float=(a,b,d=1)=>(a+Math.random()*(b-a)).toFixed(d);
   const hex=(n)=>Array.from({length:n},()=>pick('0123456789ABCDEF'.split(''))).join('');
-  const clinical=[()=>`PULSE:${int(58,108)}bpm`,()=>`O2SAT:${int(94,100)}%`,()=>`TEMP:${float(35.8,37.8)}°C`,()=>`EEG.ALPHA:${int(18,86)}%`,()=>`NEURAL.NOISE:${float(0.8,3.6,2)}dB`];
+  const clinical=[()=>`PULSE:${int(58,108)}bpm`,()=>`O2SAT:${int(94,100)}%`,()=>`TEMP:${float(35.8,37.8)}Â°C`,()=>`EEG.ALPHA:${int(18,86)}%`,()=>`NEURAL.NOISE:${float(0.8,3.6,2)}dB`];
   const corporate=[()=>`CHANNEL:KCEO.NET`,()=>`NODE:ECHO-${int(1,32)}`,()=>`SYNC:${pick(['OK','PENDING','DELAYED'])}`,()=>`INTEGRITY:${float(82.0,99.9)}%`,()=>`SUBJECT:${hex(2)}-${hex(2)}${int(10,99)}`];
-  const japanese=[()=>`状態: ${pick(['安定','変動','保留','解析中'])}`,()=>`同意: ${pick(['未設定','保留','確認済'])}`,()=>`信号: ${pick(['安定','弱い','探索中'])}`,()=>`幸福指数:${int(40,99)}%`];
+  const japanese=[()=>`çŠ¶æ…‹: ${pick(['å®‰å®š','å¤‰å‹•','ä¿ç•™','è§£æžä¸­'])}`,()=>`åŒæ„: ${pick(['æœªè¨­å®š','ä¿ç•™','ç¢ºèªæ¸ˆ'])}`,()=>`ä¿¡å·: ${pick(['å®‰å®š','å¼±ã„','æŽ¢ç´¢ä¸­'])}`,()=>`å¹¸ç¦æŒ‡æ•°:${int(40,99)}%`];
   function seg(){const buckets=[clinical,corporate,clinical]; if(Math.random()<0.2)buckets.push(japanese); const f=pick(pick(buckets)); return f();}
   function build(){
     const items=Array.from({length:int(14,18)},()=>seg());
     const dup=items.concat(items);
-    track.innerHTML = dup.map(t=>`<span class="seg">${t}</span><span class="sep">•</span>`).join('');
+    track.innerHTML = dup.map(t=>`<span class="seg">${t}</span><span class="sep">â€¢</span>`).join('');
     track.style.animation='none'; void track.offsetWidth;
     const dur=Math.max(18,Math.min(30,Math.floor(track.scrollWidth/40)));
     track.style.animation=`tickerMove ${dur}s linear infinite`;
@@ -47,7 +47,7 @@ const slidesWrap = document.getElementById('slides');
 
 // --- HELPERS ---
 function addRipple(x,y){ const r=document.createElement('span'); r.className='ripple'; r.style.left=x+'px'; r.style.top=y+'px'; slidesWrap.appendChild(r); r.addEventListener('animationend',()=>r.remove()); }
-function showLog(lines){ const log=document.getElementById('syslog'); log.innerHTML = lines.map(l=>`[SYS.LOG] ${l}`).join('<br/>'); log.classList.add('show'); clearTimeout(showLog.t); showLog.t=setTimeout(()=>log.classList.remove('show'),1800); }
+function showLog(lines){ const log=document.getElementById('syslog'); if(log){ log.innerHTML = lines.map(l=>`[SYS.LOG] ${l}`).join('<br/>'); log.classList.add('show'); clearTimeout(showLog.t); showLog.t=setTimeout(()=>log.classList.remove('show'),1800); } }
 
 // Clear transient overlays and stuck states that can hide slides
 function clearTransientOverlays(){
@@ -73,7 +73,7 @@ function goToSlide(id){
   if(next) next.classList.add('active');
   const diag = document.getElementById('diag'); // header only on slide 0
   if(diag) diag.style.display = (id===0 ? 'block' : 'none');
-  // phone-level CRT toggle removed — keep phone class/state unchanged
+  // phone-level CRT toggle removed â€” keep phone class/state unchanged
   if(id===1){
     // pure-CSS handles animation offset when the slide becomes active.
     enterTitle1();
@@ -90,7 +90,7 @@ function goToSlide(id){
     if(id===3){
       // Defensive cleanup: ensure no transient overlays or 'glitching' state
       // remain when activating slide 3. We purposely avoid inline emergency
-      // style overrides here — the CSS fix for slide 3 should be authoritative.
+      // style overrides here â€” the CSS fix for slide 3 should be authoritative.
       try{ clearTransientOverlays(); }catch(e){}
       try{ if(phone) phone.classList.remove('glitching'); }catch(e){}
       // Small delayed re-check as a race protection (keeps behavior robust).
@@ -99,7 +99,7 @@ function goToSlide(id){
   }catch(e){}
 }
 
-/* scanline wipe (0→1) */
+/* scanline wipe (0â†’1) */
 function scanWipeTint(color, next){
   try{
     // remove any existing wipe overlays so they don't stack or get stuck
@@ -128,7 +128,7 @@ function scanWipeTint(color, next){
     w.addEventListener('animationend',()=>{ try{ w.remove(); }catch(_){}; if(typeof next==='function') next(); });
   }catch(e){ console.warn('scanWipeTint error', e); if(typeof next==='function') next(); }
 }
-/* black flicker (1→2) */
+/* black flicker (1â†’2) */
 function flickerTo(next){
   const f = document.createElement('div');
   f.className = 'flicker run';
@@ -184,7 +184,7 @@ function glitchTo(nextId){
   return new Promise(res=>{
     try{
       const o = document.createElement('div'); o.className='glitch-overlay';
-      // include layered text that says 'interruption' — animated via CSS
+      // include layered text that says 'interruption' â€” animated via CSS
       o.innerHTML = '<div class="back"></div><div class="g1"></div><div class="g2"></div><div class="noise"></div>' +
                     '<div class="glitch-text">' +
                       '<span class="layer c0">interruption</span>' +
@@ -227,7 +227,8 @@ function enterSlide7(){
   if(slideEl) slideEl.dataset.entered = '1';
 
   host.innerHTML = '';
-  const text = `I know you want to take a well deserved rest\nfrom so much serious reading.\n\nBut there is an incisive part of your brain that keeps\nasking:\n\nWhat are we going to do with this parking lot situation?\n`;
+  const lang = state.lang || 'en';
+  const text = LANG[lang].slide7.typedText;
   const msPerChar = 26;
 
   // ensure buttons are hidden before typing
@@ -270,51 +271,42 @@ function populateSlide5(which){
   const read  = document.getElementById('readBtn');
   if(!body||!nearest||!read) return;
   if(which==='library'){
-    const txt = 'Here, let me guide you to your nearest library.';
-    nearest.textContent = txt; nearest.dataset.label = txt;
-    body.innerHTML = `
-      <p>As the reader you are, it’s probably the place to be.</p>
-      <p>A fellow reader approaches you and lets you know that next week, this library will be turned into a parking lot.</p>
-      <p>You decide to steal a book as a sign of resistance. Once you open it, it says:</p>
-    `;
-    read.textContent = 'read book';
-    read.textContent = 'read book';
+    const lang = state.lang || 'en';
+    const t = LANG[lang].slide5.library;
+    nearest.textContent = t.nearest;
+    nearest.dataset.label = t.nearest;
+    body.innerHTML = '<p>' + t.para1 + '</p><p>' + t.para2 + '</p><p>' + t.para3 + '</p>';
+    read.textContent = t.readBtn;
     nearest.dataset.dest = 'library';
   } else if(which==='cemetery'){
-    const txt = 'Here, let me guide you to your nearest cemetery.';
-    nearest.textContent = txt; nearest.dataset.label = txt;
-    body.innerHTML = `
-      <p>You come here once a week to visit your family.</p>
-      <p>A cemetery worker approaches you and lets you know that next week, this cemetery will be turned into a parking lot.</p>
-      <p>The wind moves a branch that was blocking a gravestone near you. It reads:</p>
-    `;
-    read.textContent = 'read inscription';
+    const lang = state.lang || 'en';
+    const t = LANG[lang].slide5.cemetery;
+    nearest.textContent = t.nearest; 
+    nearest.dataset.label = t.nearest;
+    body.innerHTML = '<p>' + t.para1 + '</p><p>' + t.para2 + '</p><p>' + t.para3 + '</p>';
+    read.textContent = t.readBtn;
     nearest.dataset.dest = 'cemetery';
   } else {
-    const txt = 'Here, let me guide you to your nearest museum.';
-    nearest.textContent = txt; nearest.dataset.label = txt;
-    body.innerHTML = `
-      <p>As the reader you are, no knowledge is enough.</p>
-      <p>While standing in front of a thought provoking piece, you see a museum guard crying while holding a pamphlet.</p>
-      <p>They tell you the museum will be turned into a parking lot, and hands you the paper, where it is printed:</p>
-    `;
-    read.textContent = 'read inscription';
+    const lang = state.lang || 'en';
+    const t = LANG[lang].slide5.museum;
+    nearest.textContent = t.nearest; 
+    nearest.dataset.label = t.nearest;
+    body.innerHTML = '<p>' + t.para1 + '</p><p>' + t.para2 + '</p><p>' + t.para3 + '</p>';
+    read.textContent = t.readBtn;
     nearest.dataset.dest = 'museum';
   }
 }
 
 /* Populate Slide 6 (reader view) */
 function populateSlide6(which){
-  // Populate the conceptual framework content for slide 6. The content is
-  // intentionally the same regardless of the 'which' parameter (choice)
-  // because this slide presents a general framing of the project.
+  // Populate the conceptual framework content for slide 6
   const container = document.getElementById('slide6Body'); if(!container) return;
+  const lang = state.lang || 'en';
+  const t = LANG[lang].slide6;
   container.innerHTML = `
-    <p>unreal state stages a world shaped by algorithmic governance and the collapse of collective fictions. It unfolds within the infrastructures that now host power and spectacle. Guided by the King CEO, a voice that merges technocratic authority with monarchical seduction, the experience draws on imaginaries proposed by Curtis Yarvin and Nick Land, where democracy is replaced by streamlined control. This performance uses the same devices that shape contemporary behavior. It explores how interactive media and mobile technologies have become new rehearsal spaces for obedience.</p>
-
-    <p>As Benjamin Bratton suggests in The Stack, planetary-scale computation operates across layers. unreal state turns these layers into narrative space. Participants navigate a system that observes, anticipates, and absorbs their decisions. But within that structure, something else begins to form. Not escape, but rhythm, friction, or pause.</p>
-
-    <p>Shall we continue?</p>
+    <p>${t.para1}</p>
+    <p>${t.para2}</p>
+    <p>${t.para3}</p>
   `;
 }
 
@@ -389,7 +381,7 @@ function adjustTitleWidth(){
     const desired = Math.max(topW, byW);
     const mainW = tMain.getBoundingClientRect().width;
     if(desired && mainW > desired){
-      // Prevent the title from being scaled too small — keep it readable.
+      // Prevent the title from being scaled too small â€” keep it readable.
       // Use JS scaling to match widths but clamp the minimum scale to 0.6.
       const scale = Math.max(0.6, desired / mainW);
       tMain.style.transformOrigin = 'center center';
@@ -429,7 +421,7 @@ function enterTitle1(){
     tMain.addEventListener('animationend', function handler(e){
       if(e.animationName!== 'mainGlitch') return;
       tMain.removeEventListener('animationend', handler);
-  // sheen follows the main animation — apply to the whole title block
+  // sheen follows the main animation â€” apply to the whole title block
   try{ if(title1){ title1.classList.add('sheen'); setTimeout(()=> title1.classList.remove('sheen'), 1100); } else { tMain.classList.add('sheen'); setTimeout(()=> tMain.classList.remove('sheen'), 1100); } }catch(e){}
       // restore any transition on the main title
       tMain.style.transition = '';
@@ -539,52 +531,20 @@ function enterSlide2(){
   pre.textContent=''; nextBtn.style.display='none'; pre.classList.remove('mono-white'); pre.classList.remove('typing-glow');
 
   const agreed = (state.choice0 === 'agree');
+  
+  // Get translations
+  const lang = state.lang || 'en';
+  const t = LANG[lang].slide2;
+  
+  // Use translated intro text
+  const introText = agreed ? t.text_agree : t.text_disagree;
+  const intro = introText.split('\n');
 
-  // Slide 2 copy per user's request
-  const introAgree = [
-    'This dossier will ask of you to trust the button process.',
-    'We are together in this journey.',
-    'Who am I?  Right now, just this voice in your head. ',
-    'Who are you? Oh, let me check.  '
-  ];
-  // bring back a short intro even when disagreeing so the flow reads
-  const introDis = [
-    'This dossier will ask of you to trust the button process.',
-    'We are together in this journey.'
-  ];
+  const sysCommon = t.sysCommon;
+  const tailAgree = t.tailAgree;
+  const tailDis = t.tailDisagree;
 
-  const sysCommon = [
-    'INITIATING USER IDENTIFICATION...',
-    '[01] ASSESSING PRIVATE INFORMATION .... OK',
-    '      _ Scanning files and apps',
-    '      _ Extracting passwords and search history  ',
-    '[02] BALANCING IDEAS + CONTEXT .... OK',
-    '      _ Cross-referencing keywords index',
-    '      _ Choosing cognitive pairing',
-    '[03] RENDERING SOCIETAL MODEL .... OK',
-    '      _ Estimating compliance probability',
-    '      _ Assigning narrative weight  '
-  ];
-
-  const tailAgree = [
-    '> RESULT: SUCCESS  ',
-    '> YOUR CHARACTER IS: "Reader of this dossier"',
-    '> permissions = [observe, interpret]',
-    '> emotional_state = [unstable]',
-    '',
-    'Congratulations! Try to stay in character at all times.'
-  ];
-
-  const tailDis = [
-    '> RESULT: SUCCESS  ',
-    '> YOUR CHARACTER IS: "Non-compliant reader of this dossier"',
-    '> permissions = [question, discuss]',
-    '> emotional_state = [unstable]',
-    '',
-    'Congratulations! Try to stay in character at all times.'
-  ];
-
-  const narrative = (agreed ? introAgree : introDis).concat(['']).concat(sysCommon).concat(['']).concat(agreed? tailAgree: tailDis);
+  const narrative = intro.concat(['']).concat(sysCommon).concat(['']).concat(agreed? tailAgree: tailDis);
   const fullText = narrative.join('\n');
 
   // much faster typing pace per user's request (22 ms/char)
@@ -592,13 +552,14 @@ function enterSlide2(){
   const msPerChar = 22;
   const estimatedMs = Math.max(3000, fullText.length * msPerChar);
   // Cap the failsafe so it doesn't wait forever; give a comfortable buffer
-  // so the 'I promise' button doesn't appear before typing completes.
+  // so the button doesn't appear before typing completes.
   // Use a scale factor rather than a small constant to accommodate longer texts.
   const failsafeMs = Math.min(60000, Math.floor(estimatedMs * 1.25));
 
   let failsafeTimer = setTimeout(()=>{
     if(getComputedStyle(nextBtn).display === 'none'){
       nextBtn.style.display = 'inline-block';
+      nextBtn.textContent = t.button;
     }
   }, failsafeMs);
 
@@ -628,7 +589,8 @@ function enterSlide2(){
     // Fade to white (keeps the blinking _)
     pre.classList.add('mono-white');
 
-    // Show the button only after typing finished
+    // Show the button only after typing finished with translated text
+    nextBtn.textContent = t.button;
     nextBtn.style.display = 'inline-block';
     // ensure starting opacity 0 for animation
     nextBtn.classList.remove('fade-in');
@@ -686,9 +648,11 @@ function showSectionLoader(ms, nextId){
       const wrap = document.createElement('div'); wrap.className='section-loader';
       const back = document.createElement('div'); back.className='loader-back';
   const box = document.createElement('div'); box.className='loader-box';
-  // ring spinner + plain text (no boxed text)
+  // ring spinner + translated text
+  const lang = state.lang || 'en';
+  const loaderText = LANG[lang].sectionLoader.gathering;
   const ring = document.createElement('div'); ring.className='loader-ring';
-  const txt = document.createElement('div'); txt.className='loader-text'; txt.textContent='gathering pertinent information about the experience for you';
+  const txt = document.createElement('div'); txt.className='loader-text'; txt.textContent=loaderText;
   box.appendChild(ring); box.appendChild(txt);
   wrap.appendChild(back); wrap.appendChild(box);
       phone.appendChild(wrap);
@@ -746,13 +710,9 @@ document.addEventListener('click', (e)=>{
     return;
   }
   if(btn.id==='wantLink'){
-    // Open one of a small set of curated links in a new tab
-    const links = [
-      'https://www.youtube.com/watch?v=1bW_a52VaO4',
-      'https://www.amazon.com/toilet-paper/s?k=toilet+paper',
-      'https://www.google.com/travel/flights?q=flights%20to%20Aruba'
-    ];
-    const url = links[Math.floor(Math.random()*links.length)];
+    // Use translated URL from LANG object
+    const lang = state.lang || 'en';
+    const url = LANG[lang].slide3.wantUrl;
     try{ window.open(url, '_blank'); showLog([`OPEN: ${url}`]); }catch(e){ showLog(['Unable to open link']); }
     return;
   }
@@ -788,7 +748,7 @@ document.addEventListener('click', (e)=>{
     return;
   }
   if(btn.id==='readContinue'){
-    // generic continue from reader — return to slide 3 (concept) or slide 0
+    // generic continue from reader â€” return to slide 3 (concept) or slide 0
     showLog(['CONTINUING']);
     try{ swipeTo(3); }catch(e){ goToSlide(3); }
     return;
@@ -858,19 +818,37 @@ document.addEventListener('click', (e)=>{
 /* ------------------ Slide 9 population ------------------ */
 const ENDINGS = {
   library: {
-    progress: `It seems that the general care for the well-being of cars has had a contagious effect. The parking lots grew until they reached the old libraries. Books were evicted for asphalt. Cars now sleep between the remains of forgotten ideas.\n\nIf a car runs over someone, it’s the person who gets hit that ends up being sued. Because it’s a car’s world, baby, and I know that’s what you wanted.\n\nLet’s jump together onto the gracious double-motor roar of the rainbow of progress, and laugh and cry with everyone beneath us.\n\nI’ve had a wonderful time. I truly hope to see you again.`,
-    negotiate: `Surprisingly, your idea was well received. Parking lot owners began merging with libraries and schools. Reading became a premium service with limited parking hours.\n\nIf you miss a payment, your favorite shelf becomes a car space. Everything is a potential parking spot unless you pay to make it human again.\n\nTurns out, human beings love paying for what used to be free. To negotiate is to let someone else set the price.\n\nI’ve had a wonderful time. I truly hope to see you again.`,
-    revolution: `You took the first step from inside the library. You made barricades with encyclopedias and Molotovs out of ink bottles. The books burned beautifully.\n\nWe have issued an arrest order for your location and dispatched officers to enforce it. It is a pity it ends this way, but I will not tolerate armed fights in the reading room. Please do not cry or feel ashamed.\n\nI can promise we will make a martyr of you. A controlled symbol of revolt people can look up to that also serves as a cautionary tale.\n\nI’ve had a wonderful time. I truly hope to see you again.`
+    progress: `It seems that the general care for the well-being of cars has had a contagious effect. The parking lots grew until they reached the old libraries. Books were evicted for asphalt. Cars now sleep between the remains of forgotten ideas.\n\nIf a car runs over someone, it's the person who gets hit that ends up being sued. Because it's a car's world, baby, and I know that's what you wanted.\n\nLet's jump together onto the gracious double-motor roar of the rainbow of progress, and laugh and cry with everyone beneath us.\n\nI've had a wonderful time. I truly hope to see you again.`,
+    negotiate: `Surprisingly, your idea was well received. Parking lot owners began merging with libraries and schools. Reading became a premium service with limited parking hours.\n\nIf you miss a payment, your favorite shelf becomes a car space. Everything is a potential parking spot unless you pay to make it human again.\n\nTurns out, human beings love paying for what used to be free. To negotiate is to let someone else set the price.\n\nI've had a wonderful time. I truly hope to see you again.`,
+    revolution: `You took the first step from inside the library. You made barricades with encyclopedias and Molotovs out of ink bottles. The books burned beautifully.\n\nWe have issued an arrest order for your location and dispatched officers to enforce it. It is a pity it ends this way, but I will not tolerate armed fights in the reading room. Please do not cry or feel ashamed.\n\nI can promise we will make a martyr of you. A controlled symbol of revolt people can look up to that also serves as a cautionary tale.\n\nI've had a wonderful time. I truly hope to see you again.`
   },
   cemetery: {
-    progress: `It seems that the general care for the well-being of cars has had a contagious effect. They now sleep over the graves, warmed by the quiet hum of engines.\n\nThey eat and bathe where you used to mourn. When a car runs over someone, it’s the person who gets hit that ends up being sued.\n\nBecause it’s a car’s world, baby, and the dead are finally at peace under the traffic lights.\n\nLet’s jump together onto the gracious double-motor roar of the rainbow of progress, and laugh and cry with everyone beneath us.\n\nI’ve had a wonderful time. I truly hope to see you again.`,
-    negotiate: `Surprisingly, your idea was well received. Parking lot owners began merging with cemeteries. People now rent graves by the hour and park by the meter.\n\nIf you miss a payment, your resting place becomes a parking spot. Everything is a potential car space unless you pay to make it human again.\n\nTurns out, human beings love paying for what used to be free. To negotiate is to let someone else set the price.\n\nI’ve had a wonderful time. I truly hope to see you again.`,
-    revolution: `You gathered the first comrades among the tombs. You spoke to the bones and promised resurrection through rage.\n\nWe have issued an arrest order for your location and dispatched officers to enforce it. It is a pity it ends this way, but I will not tolerate armed fights in sacred ground. Please do not cry or feel ashamed.\n\nI can promise we will make a martyr of you. A controlled symbol of revolt people can look up to that also serves as a cautionary tale.\n\nI’ve had a wonderful time. I truly hope to see you again.`
+    progress: `It seems that the general care for the well-being of cars has had a contagious effect. They now sleep over the graves, warmed by the quiet hum of engines.\n\nThey eat and bathe where you used to mourn. When a car runs over someone, it's the person who gets hit that ends up being sued.\n\nBecause it's a car's world, baby, and the dead are finally at peace under the traffic lights.\n\nLet's jump together onto the gracious double-motor roar of the rainbow of progress, and laugh and cry with everyone beneath us.\n\nI've had a wonderful time. I truly hope to see you again.`,
+    negotiate: `Surprisingly, your idea was well received. Parking lot owners began merging with cemeteries. People now rent graves by the hour and park by the meter.\n\nIf you miss a payment, your resting place becomes a parking spot. Everything is a potential car space unless you pay to make it human again.\n\nTurns out, human beings love paying for what used to be free. To negotiate is to let someone else set the price.\n\nI've had a wonderful time. I truly hope to see you again.`,
+    revolution: `You gathered the first comrades among the tombs. You spoke to the bones and promised resurrection through rage.\n\nWe have issued an arrest order for your location and dispatched officers to enforce it. It is a pity it ends this way, but I will not tolerate armed fights in sacred ground. Please do not cry or feel ashamed.\n\nI can promise we will make a martyr of you. A controlled symbol of revolt people can look up to that also serves as a cautionary tale.\n\nI've had a wonderful time. I truly hope to see you again.`
   },
   museum: {
-    progress: `It seems that the general care for the well-being of cars has had a contagious effect. The parking lots grew until they reached the museums.\n\nThe statues are gone, replaced by charging stations. The paintings are repainted with the color of fuel. If a car runs over someone, it’s the person who gets hit that ends up being sued.\n\nBecause it’s a car’s world, baby, and I know that’s what you wanted.\n\nLet’s jump together onto the gracious double-motor roar of the rainbow of progress, and laugh and cry with everyone beneath us.\n\nI’ve had a wonderful time. I truly hope to see you again.`,
-    negotiate: `Surprisingly, your idea was well received. Parking lot owners began merging with museums. Each car became an exhibit, each driver a donor.\n\nIf you miss a payment, your collection becomes a parking spot. Everything is a potential car space unless you pay to make it human again.\n\nTurns out, human beings love paying for what used to be free. To negotiate is to let someone else set the price.\n\nI’ve had a wonderful time. I truly hope to see you again.`,
-    revolution: `You chose the museum as your battlefield. You shouted among marble heads and bronze generals, calling for the end of ownership.\n\nWe have issued an arrest order for your location and dispatched officers to enforce it. It is a pity it ends this way, but I will not tolerate armed fights in cultural institutions. Please do not cry or feel ashamed.\n\nI can promise we will make a martyr of you. A controlled symbol of revolt people can look up to that also serves as a cautionary tale.\n\nI’ve had a wonderful time. I truly hope to see you again.`
+    progress: `It seems that the general care for the well-being of cars has had a contagious effect. The parking lots grew until they reached the museums.\n\nThe statues are gone, replaced by charging stations. The paintings are repainted with the color of fuel. If a car runs over someone, it's the person who gets hit that ends up being sued.\n\nBecause it's a car's world, baby, and I know that's what you wanted.\n\nLet's jump together onto the gracious double-motor roar of the rainbow of progress, and laugh and cry with everyone beneath us.\n\nI've had a wonderful time. I truly hope to see you again.`,
+    negotiate: `Surprisingly, your idea was well received. Parking lot owners began merging with museums. Each car became an exhibit, each driver a donor.\n\nIf you miss a payment, your collection becomes a parking spot. Everything is a potential car space unless you pay to make it human again.\n\nTurns out, human beings love paying for what used to be free. To negotiate is to let someone else set the price.\n\nI've had a wonderful time. I truly hope to see you again.`,
+    revolution: `You chose the museum as your battlefield. You shouted among marble heads and bronze generals, calling for the end of ownership.\n\nWe have issued an arrest order for your location and dispatched officers to enforce it. It is a pity it ends this way, but I will not tolerate armed fights in cultural institutions. Please do not cry or feel ashamed.\n\nI can promise we will make a martyr of you. A controlled symbol of revolt people can look up to that also serves as a cautionary tale.\n\nI've had a wonderful time. I truly hope to see you again.`
+  }
+};
+
+const ENDINGS_ES = {
+  library: {
+    progress: `Parece que la preocupación general por el bienestar de los autos ha tenido un efecto contagioso. Los estacionamientos crecieron hasta alcanzar las viejas bibliotecas. Los libros fueron desalojados para dar lugar al asfalto. Los autos ahora duermen entre los restos de las ideas olvidadas.\n\nSi un auto atropella a alguien, es la persona atropellada quien termina siendo demandada. Porque este es el mundo de los autos, bebé, y sé que eso es lo que querías.\n\nSaltemos juntos sobre el gracioso rugido de doble motor del arcoíris del progreso, y riamos y lloremos con todos los que quedaron debajo.\n\nHe pasado un tiempo maravilloso. Realmente espero volver a verte.`,
+    negotiate: `Sorprendentemente, tu idea fue bien recibida. Los dueños de estacionamientos comenzaron a fusionarse con bibliotecas y escuelas. Leer se volvió un servicio premium con horarios limitados de estacionamiento.\n\nSi te atrasas con el pago, tu estante favorito se convierte en un espacio para autos. Todo es un posible estacionamiento, a menos que pagues para volverlo humano.\n\nResulta que a los seres humanos les encanta pagar por lo que antes era gratis. Negociar es dejar que otro fije el precio.\n\nHe pasado un tiempo maravilloso. Realmente espero volver a verte.`,
+    revolution: `Diste el primer paso desde adentro de la biblioteca. Hiciste barricadas con enciclopedias y cócteles molotov con frascos de tinta. Los libros ardieron con una belleza trágica.\n\nHemos emitido una orden de arresto en tu contra y enviado oficiales para hacerla cumplir. Es una pena que termine así, pero no toleraré enfrentamientos armados en la sala de lectura. Por favor, no llores ni te avergüences.\n\nPuedo prometerte que haremos de ti un mártir. Un símbolo controlado de la revuelta al que la gente pueda admirar y, al mismo tiempo, temer.\n\nHe pasado un tiempo maravilloso. Realmente espero volver a verte.`
+  },
+  cemetery: {
+    progress: `Parece que la preocupación general por el bienestar de los autos ha tenido un efecto contagioso. Ahora duermen sobre las tumbas, calentados por el suave zumbido de los motores.\n\nComen y se bañan donde antes se lloraba. Cuando un auto atropella a alguien, es la persona atropellada quien termina siendo demandada.\n\nPorque este es el mundo de los autos, bebé, y los muertos finalmente descansan en paz bajo los semáforos.\n\nSaltemos juntos sobre el gracioso rugido de doble motor del arcoíris del progreso, y riamos y lloremos con todos los que quedaron debajo.\n\nHe pasado un tiempo maravilloso. Realmente espero volver a verte.`,
+    negotiate: `Sorprendentemente, tu idea fue bien recibida. Los dueños de estacionamientos comenzaron a fusionarse con cementerios. Ahora la gente alquila tumbas por hora y estaciona por minuto.\n\nSi te atrasas con el pago, tu lugar de descanso se convierte en un espacio para autos. Todo es un posible estacionamiento, a menos que pagues para volverlo humano.\n\nResulta que a los seres humanos les encanta pagar por lo que antes era gratis. Negociar es dejar que otro fije el precio.\n\nHe pasado un tiempo maravilloso. Realmente espero volver a verte.`,
+    revolution: `Reuniste a los primeros camaradas entre las tumbas. Hablaste con los huesos y les prometiste resurrección a través de la rabia.\n\nHemos emitido una orden de arresto en tu contra y enviado oficiales para hacerla cumplir. Es una pena que termine así, pero no toleraré enfrentamientos armados en tierra sagrada. Por favor, no llores ni te avergüences.\n\nPuedo prometerte que haremos de ti un mártir. Un símbolo controlado de la revuelta al que la gente pueda admirar y, al mismo tiempo, temer.\n\nHe pasado un tiempo maravilloso. Realmente espero volver a verte.`
+  },
+  museum: {
+    progress: `Parece que la preocupación general por el bienestar de los autos ha tenido un efecto contagioso. Los estacionamientos crecieron hasta alcanzar los museos.\n\nLas estatuas desaparecieron, reemplazadas por estaciones de carga. Las pinturas fueron repintadas con el color del combustible. Si un auto atropella a alguien, es la persona atropellada quien termina siendo demandada.\n\nPorque este es el mundo de los autos, bebé, y sé que eso es lo que querías.\n\nSaltemos juntos sobre el gracioso rugido de doble motor del arcoíris del progreso, y riamos y lloremos con todos los que quedaron debajo.\n\nHe pasado un tiempo maravilloso. Realmente espero volver a verte.`,
+    negotiate: `Sorprendentemente, tu idea fue bien recibida. Los dueños de estacionamientos comenzaron a fusionarse con museos. Cada auto se convirtió en una obra, cada conductor en un mecenas.\n\nSi te atrasas con el pago, tu colección se convierte en un estacionamiento. Todo es un posible espacio para autos, a menos que pagues para volverlo humano.\n\nResulta que a los seres humanos les encanta pagar por lo que antes era gratis. Negociar es dejar que otro fije el precio.\n\nHe pasado un tiempo maravilloso. Realmente espero volver a verte.`,
+    revolution: `Elegiste el museo como tu campo de batalla. Gritaste entre cabezas de mármol y generales de bronce, reclamando el fin de la propiedad.\n\nHemos emitido una orden de arresto en tu contra y enviado oficiales para hacerla cumplir. Es una pena que termine así, pero no toleraré enfrentamientos armados en instituciones culturales. Por favor, no llores ni te avergüences.\n\nPuedo prometerte que haremos de ti un mártir. Un símbolo controlado de la revuelta al que la gente pueda admirar y, al mismo tiempo, temer.\n\nHe pasado un tiempo maravilloso. Realmente espero volver a verte.`
   }
 };
 
@@ -882,8 +860,10 @@ function populateSlide9(){
   const choice = (state.choice2 || localStorage.getItem('choice2') || 'progress');
   const p = String(place).toLowerCase();
   const c = String(choice).toLowerCase();
+  const lang = state.lang || 'en';
+  const endingsSource = lang === 'es' ? ENDINGS_ES : ENDINGS;
   let txt = '';
-  try{ txt = (ENDINGS[p] && ENDINGS[p][c]) ? ENDINGS[p][c] : ENDINGS.library.progress; }catch(e){ txt = ENDINGS.library.progress; }
+  try{ txt = (endingsSource[p] && endingsSource[p][c]) ? endingsSource[p][c] : endingsSource.library.progress; }catch(e){ txt = endingsSource.library.progress; }
   const paragraphs = String(txt).split('\n\n').filter(x=>String(x||'').trim().length>0);
 
   // Insert typing indicator
@@ -948,11 +928,11 @@ function populateSlide9(){
         await wait(2000);
       }
 
-  // Sequence complete — give layout a short moment to settle (fonts and
+  // Sequence complete â€” give layout a short moment to settle (fonts and
   // transitions) before making the final measurement and revealing buttons.
   await wait(80);
 
-  // Sequence complete — before revealing buttons, ensure all messages
+  // Sequence complete â€” before revealing buttons, ensure all messages
   // are readable on screen. If the total chat content fits within the
   // frame, add top margin so the messages sit fully inside the frame
   // (no scrolling). Otherwise, keep the natural scroll at bottom.
@@ -963,7 +943,7 @@ function populateSlide9(){
           const totalH = chat.scrollHeight;
           const frameH = f.clientHeight;
           if(totalH <= frameH){
-            // messages fit — push the list down so all items are visible.
+            // messages fit â€” push the list down so all items are visible.
             // Keep a small reserved gap (36px) between the last message and
             // the absolute-positioned button so they visually connect without
             // overlapping. This reduces the large empty area above the button.
@@ -972,7 +952,7 @@ function populateSlide9(){
             // ensure no scroll offset
             f.scrollTop = 0;
           } else {
-            // messages overflow — clear any manual margin and scroll to bottom
+            // messages overflow â€” clear any manual margin and scroll to bottom
             chat.style.marginTop = '';
             f.scrollTop = f.scrollHeight;
           }
@@ -1029,6 +1009,490 @@ if(!document.querySelector('.slide.active')){
   try{ goToSlide(0); }catch(e){}
 }
 
+// --- LANGUAGE SUPPORT ---
+const LANG = {
+  en: {
+    slide0: {
+      header: 'dossier / unreal state',
+      title: '<span class="accent">this is a dossier</span>',
+      agree: 'i agree',
+      disagree: 'i disagree',
+      meta: [
+        'file thought for cell experience',
+        'but you can open it wherever you like',
+        '',
+        '<span>EST. 2025</span>'
+      ]
+    },
+    slide1: {
+      tTop: 'welcome to the',
+      tMain: 'unreal state',
+      tBy: 'by marcos krivocapich',
+      startBtn: 'start'
+    },
+    slide2: {
+      text_agree: 'This dossier will ask of you to trust the button process.\nWe are together in this journey.\nWho am I?  Right now, just this voice in your head. \nWho are you? Oh, let me check.  ',
+      text_disagree: 'This dossier will ask of you to trust the button process.\nWe are together in this journey.',
+      button: "I'll try",
+      sysCommon: [
+        'INITIATING USER IDENTIFICATION...',
+        '[01] ASSESSING PRIVATE INFORMATION .... OK',
+        '      _ Scanning files and apps',
+        '      _ Extracting passwords and search history  ',
+        '[02] BALANCING IDEAS + CONTEXT .... OK',
+        '      _ Cross-referencing keywords index',
+        '      _ Choosing cognitive pairing',
+        '[03] RENDERING SOCIETAL MODEL .... OK',
+        '      _ Estimating compliance probability',
+        '      _ Assigning narrative weight  '
+      ],
+      tailAgree: [
+        '> RESULT: SUCCESS  ',
+        '> YOUR CHARACTER IS: "Reader of this dossier"',
+        '> permissions = [observe, interpret]',
+        '> emotional_state = [unstable]',
+        '',
+        'Congratulations! Try to stay in character at all times.'
+      ],
+      tailDisagree: [
+        '> RESULT: SUCCESS  ',
+        '> YOUR CHARACTER IS: "Non-compliant reader of this dossier"',
+        '> permissions = [question, discuss]',
+        '> emotional_state = [unstable]',
+        '',
+        'Congratulations! Try to stay in character at all times.'
+      ]
+    },
+    slide3: {
+      wantUrl: 'https://www.amazon.com/s?k=stuff',
+      flightUrl: 'https://www.google.com/travel/flights',
+      title: 'concept',
+      lead: `What if I told you I know what you <span class="typing-cyan">want</span> before you know it?`,
+      para1: `unreal state is an <span class="typing-mag">immersive</span> urban performance disguised as a role-playing game. Participants move alone through the city as fictional characters, guided by a mobile app that speaks in the voice of the <span class="typing-cyan">King CEO</span>, an <span class="typing-ylw">algorithmic</span> figure that claims to know players' desires in advance. The city becomes a game board where common urban spaces such as parks, schools, cemeteries, and construction sites serve as narrative checkpoints.`,
+      para2: `Along the way, each player receives a printed choose your own adventure booklet, offering <span class="typing-mag">analog detours</span> that resist the logic of the system. The story unfolds through individual actions and encounters, but the outcome is revealed <span class="typing-cyan">collectively</span> in a final scene from a high point in the city, where players see the full map for the first time.`,
+      para3: `Blending <span class="typing-ylw">digital control</span> with performative agency, unreal state reflects on how <span class="typing-mag">algorithms</span>, speculation, and corporate systems shape contemporary urban life.`,
+      btnWant: "ok, let's see, what do i want?",
+      btnContinue: 'i want to continue with the dossier'
+    },
+    slide4: {
+      title: 'game mechanics',
+      mainTitle: 'game mechanics',
+      para1: `The experience is designed for up to <span class="typing-ylw">thirty participants</span> per session. Each player begins from a different point in the city, embodying a unique fictional character inspired by recognizable archetypes such as tenants, developers, tourists, activists, or bureaucrats.`,
+      para2: `Each participant follows a path made up of eleven urban scenes, across flexible locations like libraries, schools, plazas, cemeteries, and construction sites. Players move independently, guided by a <span class="typing-cyan">mobile app</span> that activates content based on their location and decisions. The structure creates the <span class="typing-mag">illusion of freedom</span> while subtly revealing a closed system beneath it.`,
+      para3: `Although each journey is individual, the experience includes scenes shared with others and <span class="typing-cyan">synchronized events</span> that affect all participants. Players navigate the city as if playing against the app itself, testing its <span class="typing-ylw">control</span>.`,
+      para4: `In parallel, each carries a <span class="typing-mag">printed booklet</span> with optional narrative detours. In the final scene, everyone gathers at a high point in the city where the <span class="typing-cyan">collective result</span> of their actions is revealed.`,
+      para5: 'To give you a silly example, choose one:',
+      btnLibrary: 'Library',
+      btnCemetery: 'Cemetery',
+      btnMuseum: 'Museum'
+    },
+    sectionLoader: {
+      gathering: 'gathering pertinent information about the experience for you'
+    },
+    slide5: {
+      library: {
+        nearest: 'Here, let me guide you to your nearest library.',
+        para1: "As the reader you are, it's probably the place to be.",
+        para2: 'A fellow reader approaches you and lets you know that next week, this library will be turned into a parking lot.',
+        para3: 'You decide to steal a book as a sign of resistance. Once you open it, it says:',
+        readBtn: 'read book'
+      },
+      cemetery: {
+        nearest: 'Here, let me guide you to your nearest cemetery.',
+        para1: 'You come here once a week to visit your family.',
+        para2: 'A cemetery worker approaches you and lets you know that next week, this cemetery will be turned into a parking lot.',
+        para3: 'The wind moves a branch that was blocking a gravestone near you. It reads:',
+        readBtn: 'read inscription'
+      },
+      museum: {
+        nearest: 'Here, let me guide you to your nearest museum.',
+        para1: 'As the reader you are, no knowledge is enough.',
+        para2: 'While standing in front of a thought provoking piece, you see a museum guard crying while holding a pamphlet.',
+        para3: 'They tell you the museum will be turned into a parking lot, and hands you the paper, where it is printed:',
+        readBtn: 'read inscription'
+      }
+    },
+    slide10: {
+      title: 'thank you for your interest in',
+      mainTitle: 'unreal state',
+      tBy: 'by marcos krivocapich',
+      contact: 'Contact information',
+      btnTop: 'go back to the top',
+      btnNice: 'take me somewhere nice',
+      btnNiceUrl: 'https://open.spotify.com/intl-es/track/1x5sYLZiu9r5E43kMlt9f8?si=1b4cea68c83a49af'
+    },
+    slide6: {
+      title: 'A question:',
+      para1: 'Do we, human beings, need a conceptual framework to understand ourselves and our place in the universe?',
+      para2: 'Are we prisoners of this framework, or do we have the ability to create new frameworks as we please?',
+      para3: 'What do you think?',
+      btnYes: 'yes',
+      btnNo: 'no'
+    },
+    slide7: {
+      typedText: 'You were presented with a conceptual framework.\n\nYou exist in a city where parking lots are more valuable than libraries, cemeteries, or museums.\n\nHow do you react?',
+      btnProgress: 'It\'s called <span class="typing-ylw">progress</span>. Human beings need cars to survive and thrive, and they need places to put their cars to sleep.',
+      btnNegotiate: 'Try to find a way to make both things work together. <span class="typing-cyan">Negotiate</span>, resign some things, get other things.',
+      btnRevolution: 'It\'s time for the <span class="typing-mag">armed revolution</span>, we have been waiting too long, this was the last straw.'
+    },
+    slide8: {
+      title: 'Narrative causality',
+      para1: 'To understand our narratives, we need clear cause-and-effect relationships. Life, however, doesn\'t work that way.',
+      para2: 'Life is entropic, and ultimately directionless. That\'s one of the reasons we tell ourselves stories, to try and make sense of it all.',
+      para3: 'Complex stories benefit from structure because they encourage causality. The structure chosen serves the causality the author wants to convey.',
+      para4: 'That causality works backward. It traces the result to find a cause. Or more importantly, which cause. And even more importantly, how that cause was determined.',
+      btnContinue: 'okay, great, but what about the parking lot?'
+    },
+    slide9: {
+      btnRestart: 'say goodbye'
+    }
+  },
+  es: {
+    slide0: {
+      header: 'dossier / unreal state',
+      title: '<span class="accent">esto es un dossier</span>',
+      agree: 'estoy de acuerdo',
+      disagree: 'no estoy de acuerdo',
+      meta: [
+        'archivo pensado para la experiencia del celular',
+        'pero puedes abrirlo donde quieras',
+        '',
+        '<span>EST. 2025</span>'
+      ]
+    },
+    slide1: {
+      tTop: 'te damos la bienvenida al',
+      tMain: 'unreal state',
+      tBy: 'por marcos krivocapich',
+      startBtn: 'comenzar'
+    },
+    slide2: {
+      text_agree: 'Este dossier te pide que confíes en el proceso de los botones.\nEstamos juntos en este viaje.\n¿Quién soy? En este momento, solo esta voz en tu cabeza.\n¿Quién eres tú? Ah, déjame revisar.',
+      text_disagree: 'Este dossier te pide que confíes en el proceso de los botones.\nEstamos juntos en este viaje.',
+      button: 'lo intentaré',
+      sysCommon: [
+        'INICIANDO IDENTIFICACIÓN DE USUARIO...',
+        '[01] EVALUANDO INFORMACIÓN PRIVADA .... OK',
+        '      _ Escaneando archivos y aplicaciones',
+        '      _ Extrayendo contraseñas e historial de búsqueda  ',
+        '[02] BALANCEANDO IDEAS + CONTEXTO .... OK',
+        '      _ Referenciando índice de palabras clave',
+        '      _ Eligiendo emparejamiento cognitivo',
+        '[03] RENDERIZANDO MODELO SOCIAL .... OK',
+        '      _ Estimando probabilidad de cumplimiento',
+        '      _ Asignando peso narrativo  '
+      ],
+      tailAgree: [
+        '> RESULTADO: ÉXITO  ',
+        '> TU PERSONAJE ES: "Lector de este dossier"',
+        '> permisos = [observar, interpretar]',
+        '> estado_emocional = [inestable]',
+        '',
+        'Felicitaciones! Intenta mantenerte en personaje en todo momento.'
+      ],
+      tailDisagree: [
+        '> RESULTADO: ÉXITO  ',
+        '> TU PERSONAJE ES: "Lector no conforme de este dossier"',
+        '> permisos = [cuestionar, discutir]',
+        '> estado_emocional = [inestable]',
+        '',
+        'Felicitaciones! Intenta mantenerte en personaje en todo momento.'
+      ]
+    },
+    slide3: {
+      wantUrl: 'https://www.amazon.es/s?k=cosas',
+      flightUrl: 'https://www.google.com/travel/flights?hl=es',
+      title: 'concepto',
+      lead: `¿Y si te dijera que sé lo que <span class="typing-cyan">quieres</span> antes de que tú lo sepas?`,
+      para1: `unreal state es una performance urbana <span class="typing-mag">inmersiva</span> disfrazada de juego de rol. Los participantes se mueven solos por la ciudad como personajes ficticios, guiados por una app móvil que habla con la voz del <span class="typing-cyan">Rey CEO</span>, una figura <span class="typing-ylw">algorítmica</span> que afirma conocer los deseos de los jugadores de antemano. La ciudad se convierte en un tablero de juego donde espacios urbanos comunes como parques, escuelas, cementerios y sitios de construcción sirven como puntos de control narrativos.`,
+      para2: `En el camino, cada jugador recibe un cuadernillo impreso tipo "elige tu propia aventura", ofreciendo <span class="typing-mag">desvíos analógicos</span> que resisten la lógica del sistema. La historia se despliega a través de acciones individuales y encuentros, pero el resultado se revela <span class="typing-cyan">colectivamente</span> en una escena final desde un punto alto de la ciudad, donde los jugadores ven el mapa completo por primera vez.`,
+      para3: `Mezclando <span class="typing-ylw">control digital</span> con agencia performativa, unreal state reflexiona sobre cómo <span class="typing-mag">algoritmos</span>, especulación y sistemas corporativos dan forma a la vida urbana contemporánea.`,
+      btnWant: 'ok, a ver, ¿qué quiero?',
+      btnContinue: 'quiero continuar con el dossier'
+    },
+    slide4: {
+      title: 'mecánicas de juego',
+      mainTitle: 'mecánicas de juego',
+      para1: `La experiencia está diseñada para hasta <span class="typing-ylw">treinta participantes</span> por sesión. Cada jugador comienza desde un punto diferente de la ciudad, encarnando un personaje ficticio único inspirado en arquetipos reconocibles como inquilinos, desarrolladores, turistas, activistas o burócratas.`,
+      para2: `Cada participante sigue un camino compuesto por once escenas urbanas, a través de ubicaciones flexibles como bibliotecas, escuelas, plazas, cementerios y sitios de construcción. Los jugadores se mueven de forma independiente, guiados por una <span class="typing-cyan">app móvil</span> que activa contenido basado en su ubicación y decisiones. La estructura crea la <span class="typing-mag">ilusión de libertad</span> mientras revela sutilmente un sistema cerrado debajo.`,
+      para3: `Aunque cada viaje es individual, la experiencia incluye escenas compartidas con otros y <span class="typing-cyan">eventos sincronizados</span> que afectan a todos los participantes. Los jugadores navegan la ciudad como si jugaran contra la app misma, probando su <span class="typing-ylw">control</span>.`,
+      para4: `En paralelo, cada uno lleva un <span class="typing-mag">cuadernillo impreso</span> con desvíos narrativos opcionales. En la escena final, todos se reúnen en un punto alto de la ciudad donde se revela el <span class="typing-cyan">resultado colectivo</span> de sus acciones.`,
+      para5: 'Para darte un ejemplo tonto, elige uno:',
+      btnLibrary: 'Biblioteca',
+      btnCemetery: 'Cementerio',
+      btnMuseum: 'Museo'
+    },
+    sectionLoader: {
+      gathering: 'recopilando información...'
+    },
+    slide5: {
+      library: {
+        nearest: 'Aquí, déjame guiarte a tu biblioteca más cercana.',
+        para1: 'Como buen lector que eres, probablemente sea el lugar donde deberías estar.',
+        para2: 'Un compañero lector se acerca y te dice que la semana que viene, esta biblioteca se convertirá en un estacionamiento.',
+        para3: 'Decides robar un libro como señal de resistencia. Cuando lo abres, dice:',
+        readBtn: 'leer libro'
+      },
+      cemetery: {
+        nearest: 'Aquí, déjame guiarte a tu cementerio más cercano.',
+        para1: 'Vienes aquí una vez por semana a visitar a tu familia.',
+        para2: 'Un trabajador del cementerio se acerca y te dice que la semana que viene, este cementerio se convertirá en un estacionamiento.',
+        para3: 'El viento mueve una rama que bloqueaba una lápida cerca tuyo. Se lee:',
+        readBtn: 'leer inscripción'
+      },
+      museum: {
+        nearest: 'Aquí, déjame guiarte a tu museo más cercano.',
+        para1: 'Como buen lector que eres, nunca hay suficiente conocimiento.',
+        para2: 'Mientras te paras frente a una pieza que invita a la reflexión, ves a un guardia del museo llorando mientras sostiene un panfleto.',
+        para3: 'Te dice que el museo se convertirá en un estacionamiento, y te entrega el papel, donde dice:',
+        readBtn: 'leer inscripción'
+      }
+    },
+    slide10: {
+      title: 'gracias por tu interés en',
+      mainTitle: 'unreal state',
+      tBy: 'por marcos krivocapich',
+      contact: 'Contacto',
+      btnTop: 'volver al inicio',
+      btnNice: 'llévame a un lugar mejor',
+      btnNiceUrl: 'https://open.spotify.com/intl-es/track/3kycJJLBAAeMaujoWDqCd8?si=e6ab89e0c3d94d05'
+    },
+    slide6: {
+      title: 'marco conceptual',
+      para1: `unreal state escenifica un mundo moldeado por la gobernanza algorítmica y el colapso de las ficciones colectivas. Se despliega dentro de las infraestructuras que ahora albergan poder y espectáculo. Guiado por el Rey CEO, una voz que fusiona autoridad tecnocrática con seducción monárquica, la experiencia se inspira en imaginarios propuestos por Curtis Yarvin y Nick Land, donde la democracia es reemplazada por control optimizado. Esta performance usa los mismos dispositivos que moldean el comportamiento contemporáneo. Explora cómo los medios interactivos y las tecnologías móviles se han convertido en nuevos espacios de ensayo para la obediencia.`,
+      para2: `Como sugiere Benjamin Bratton en The Stack, la computación a escala planetaria opera a través de capas. unreal state convierte estas capas en espacio narrativo. Los participantes navegan un sistema que observa, anticipa y absorbe sus decisiones. Pero dentro de esa estructura, algo más comienza a formarse. No escape, sino ritmo, fricción o pausa.`,
+      para3: `¿Continuamos?`,
+      btnYes: 'sí',
+      btnNo: 'no'
+    },
+    slide7: {
+      typedText: `Sé que quieres tomarte un merecido descanso\ndespués de tanta lectura seria.\n\nPero hay una parte incisiva de tu cerebro que sigue\npreguntando:\n\n¿Qué vamos a hacer con esta situación del estacionamiento?\n`,
+      btnProgress: 'Se llama <span class="typing-ylw">progreso</span>. Los seres humanos necesitan autos para sobrevivir y prosperar, y necesitan lugares donde sus autos puedan dormir.',
+      btnNegotiate: 'Intentar encontrar una forma de que ambas cosas funcionen juntas. <span class="typing-cyan">Negociar</span>, resignar algunas cosas, conseguir otras.',
+      btnRevolution: 'Es hora de la <span class="typing-mag">revolución armada</span>, hemos esperado demasiado, esta fue la gota que colmó el vaso.'
+    },
+    slide8: {
+      title: 'equipo',
+      para1: `unreal state es un proyecto dirigido por <span class="typing-cyan">Marcos Krivocapich</span>, un artista escénico y multimedia cuyo trabajo explora <span class="typing-mag">formatos híbridos</span> que combinan teatro, tecnología y crítica política.`,
+      para2: `Durante los últimos cinco años, ha colaborado con los artistas canadienses Milton Lim y Patrick Blenkarn, conocidos por su trabajo performático <span class="typing-ylw">interactivo y digital</span>. Actualmente está co-creando una nueva pieza con ellos, con el apoyo del Consejo de las Artes de Canadá.`,
+      para3: `Este proyecto involucra un <span class="typing-cyan">equipo internacional</span> de colaboradores de Argentina, Chile, Alemania e Italia, con experiencia en artes escénicas, sistemas interactivos y dramaturgia. El equipo incluye a Catalina Lescano (AR), escritora e investigadora; León Siewert-Langhoff (DE), programador y dramaturgo; Fabián Andrade (CL), diseñador y desarrollador de juegos; Corrado Russo (IT), productor internacional; y Carola Zelaschi (AR), compositora y diseñadora de sonido.`,
+      para4: `unreal state cuenta con el apoyo de Mobilità delle arti (Italia) y ha sido seleccionado para la fase de producción de la <span class="typing-mag">red In Situ</span> (2025). Incluirá un período de residencia y coproducción con instituciones asociadas y una presentación pública de un <span class="typing-ylw">prototipo</span> en FiraTàrrega, España, en septiembre de 2026.`,
+      btnContinue: 'ok, genial, ¿pero qué hay del estacionamiento?'
+    },
+    slide9: {
+      btnRestart: 'decir adiós'
+    }
+  }
+};
+
+// Track selected language
+state.lang = state.lang || 'en';
+
+// Language selection handler
+function selectLanguage(lang) {
+  state.lang = lang;
+  applyLanguage(lang);
+  
+  // Animate language slide exit with boot effect
+  const langSlide = document.getElementById('langSlide');
+  if (langSlide) {
+    langSlide.classList.add('lang-exit');
+    setTimeout(() => {
+      langSlide.classList.remove('active', 'lang-exit');
+      
+      // Activate slide 0 with boot animation
+      const slide0 = document.querySelector('.slide[data-id="0"]');
+      if (slide0) {
+        slide0.classList.add('active', 'lang-enter');
+        // Clean up lang-enter class after animation
+        setTimeout(() => slide0.classList.remove('lang-enter'), 1400);
+      }
+    }, 700);
+  }
+}
+
+// Apply translations to DOM
+function applyLanguage(lang) {
+  const t = LANG[lang];
+  
+  // Slide 0
+  const title0 = document.getElementById('title0');
+  if (title0) title0.innerHTML = t.slide0.title;
+  
+  const agreeBtn = document.querySelector('.slide[data-id="0"] .btn.agree');
+  const disagreeBtn = document.querySelector('.slide[data-id="0"] .btn.disagree');
+  if (agreeBtn) agreeBtn.textContent = t.slide0.agree;
+  if (disagreeBtn) disagreeBtn.textContent = t.slide0.disagree;
+  
+  const metaPs = document.querySelectorAll('.slide[data-id="0"] .meta p');
+  t.slide0.meta.forEach((text, i) => {
+    if (metaPs[i]) metaPs[i].innerHTML = text;
+  });
+  
+  // Slide 1
+  const tTop = document.getElementById('tTop');
+  const tMain = document.getElementById('tMain');
+  const tBy = document.getElementById('tBy');
+  const startBtn = document.querySelector('.slide[data-id="1"] .btn.start');
+  
+  if (tTop) tTop.textContent = t.slide1.tTop;
+  if (tMain) tMain.textContent = t.slide1.tMain;
+  if (tBy) tBy.textContent = t.slide1.tBy;
+  if (startBtn) startBtn.textContent = t.slide1.startBtn;
+  
+  // Slide 10
+  const slide10Title = document.querySelector('.slide[data-id="10"] .title');
+  const slide10MainTitle = document.getElementById('slide10Title');
+  const slide10By = document.querySelector('.slide[data-id="10"] .t-by');
+  const slide10Contact = document.querySelector('.slide[data-id="10"] .body p:first-child');
+  const slide10Top = document.getElementById('slide10Top');
+  const slide10Nice = document.getElementById('slide10Nice');
+  
+  if (slide10Title) slide10Title.textContent = t.slide10.title;
+  if (slide10MainTitle) slide10MainTitle.textContent = t.slide10.mainTitle;
+  if (slide10By) slide10By.textContent = t.slide10.tBy;
+  if (slide10Contact) slide10Contact.textContent = t.slide10.contact;
+  if (slide10Top) slide10Top.textContent = t.slide10.btnTop;
+  if (slide10Nice) {
+    slide10Nice.textContent = t.slide10.btnNice;
+    slide10Nice.addEventListener('click', () => {
+      window.open(t.slide10.btnNiceUrl, '_blank');
+    });
+  }
+  
+  // Apply slide-specific translations
+  applySlideTranslations(lang);
+}
+
+// Apply translations to specific slide content
+function applySlideTranslations(lang) {
+  const t = LANG[lang];
+  
+  // Reset slide 7 so it can be re-typed in the new language
+  const slide7 = document.querySelector('.slide[data-id="7"]');
+  if (slide7) {
+    slide7.dataset.entered = '0';
+    const host = document.getElementById('slide7Typed');
+    if (host) host.innerHTML = '';
+  }
+  
+  // Slide 3: Update content and buttons
+  const slide3Title = document.querySelector('.slide[data-id="3"] .concept .title');
+  const slide3Body = document.querySelector('.slide[data-id="3"] .concept .body');
+  const wantLink = document.getElementById('wantLink');
+  const continueDossier = document.getElementById('continueDossier');
+  
+  if (slide3Title) {
+    slide3Title.textContent = t.slide3.title;
+  }
+  
+  if (slide3Body) {
+    slide3Body.innerHTML = `
+      <p class="lead">${t.slide3.lead}</p>
+      <p>${t.slide3.para1}</p>
+      <p>${t.slide3.para2}</p>
+      <p>${t.slide3.para3}</p>
+    `;
+  }
+  
+  if (wantLink) {
+    wantLink.textContent = t.slide3.btnWant;
+    wantLink.onclick = () => {
+      window.open(t.slide3.wantUrl, '_blank');
+    };
+  }
+  
+  if (continueDossier) {
+    continueDossier.textContent = t.slide3.btnContinue;
+    // Add direct event listener to ensure it works
+    continueDossier.onclick = () => {
+      showLog(['CONTINUING DOSSIER']);
+      try{ swipeTo(4); }catch(e){ try{ goToSlide(4); }catch(_){} }
+    };
+  }
+  
+  // Slide 4: Update content and buttons
+  const slide4Title = document.querySelector('.slide[data-id="4"] .concept .title');
+  const slide4MainTitle = document.querySelector('.slide[data-id="4"] .concept .t-main');
+  const slide4Body = document.querySelector('.slide[data-id="4"] .concept .body');
+  const slide4LibraryBtn = document.getElementById('siteLibrary');
+  const slide4CemeteryBtn = document.getElementById('siteCemetery');
+  const slide4MuseumBtn = document.getElementById('siteMuseum');
+  
+  if (slide4Title) slide4Title.textContent = t.slide4.title;
+  if (slide4MainTitle) slide4MainTitle.textContent = t.slide4.mainTitle;
+  if (slide4Body) {
+    slide4Body.innerHTML = `
+      <p>${t.slide4.para1}</p>
+      <p>${t.slide4.para2}</p>
+      <p>${t.slide4.para3}</p>
+      <p>${t.slide4.para4}</p>
+      <p>${t.slide4.para5}</p>
+    `;
+  }
+  if (slide4LibraryBtn) slide4LibraryBtn.textContent = t.slide4.btnLibrary;
+  if (slide4CemeteryBtn) slide4CemeteryBtn.textContent = t.slide4.btnCemetery;
+  if (slide4MuseumBtn) slide4MuseumBtn.textContent = t.slide4.btnMuseum;
+  
+  // Slide 6: Update title and buttons
+  const slide6Title = document.querySelector('.slide[data-id="6"] .concept .title');
+  const slide6Yes = document.getElementById('slide6Yes');
+  const slide6No = document.getElementById('slide6No');
+  if (slide6Title) slide6Title.textContent = t.slide6.title;
+  if (slide6Yes) slide6Yes.textContent = t.slide6.btnYes;
+  if (slide6No) slide6No.textContent = t.slide6.btnNo;
+  
+  // Slide 7: Update buttons
+  const slide7Btn1 = document.getElementById('slide7Btn1');
+  const slide7Btn2 = document.getElementById('slide7Btn2');
+  const slide7Btn3 = document.getElementById('slide7Btn3');
+  if (slide7Btn1) slide7Btn1.innerHTML = t.slide7.btnProgress;
+  if (slide7Btn2) slide7Btn2.innerHTML = t.slide7.btnNegotiate;
+  if (slide7Btn3) slide7Btn3.innerHTML = t.slide7.btnRevolution;
+  
+  // Slide 8: Update content and button
+  const slide8Title = document.querySelector('.slide[data-id="8"] .concept .title');
+  const slide8Body = document.querySelector('.slide[data-id="8"] .concept .body');
+  const slide8Continue = document.getElementById('slide8Continue');
+  
+  if (slide8Title) slide8Title.textContent = t.slide8.title;
+  if (slide8Body) {
+    slide8Body.innerHTML = `
+      <p>${t.slide8.para1}</p>
+      <p>${t.slide8.para2}</p>
+      <p>${t.slide8.para3}</p>
+      <p>${t.slide8.para4}</p>
+    `;
+  }
+  if (slide8Continue) slide8Continue.textContent = t.slide8.btnContinue;
+  
+  // Slide 9: Update button
+  const slide9Restart = document.getElementById('slide9Restart');
+  if (slide9Restart) slide9Restart.textContent = t.slide9.btnRestart;
+}
+
+// Initialize language selection
+window.addEventListener('DOMContentLoaded', () => {
+  const langEN = document.getElementById('langEN');
+  const langES = document.getElementById('langES');
+  
+  if (langEN) {
+    langEN.addEventListener('click', () => selectLanguage('en'));
+  }
+  if (langES) {
+    langES.addEventListener('click', () => selectLanguage('es'));
+  }
+  
+  // Ensure language slide is active on load
+  const langSlide = document.getElementById('langSlide');
+  const slide0 = document.querySelector('.slide[data-id="0"]');
+  
+  if (langSlide && slide0) {
+    langSlide.classList.add('active');
+    slide0.classList.remove('active');
+  }
+});
+
 // self-test (smoke checks)
 (function selfTests(){
   const results=[]; const assert=(ok,msg)=>results.push({ok,msg});
@@ -1041,4 +1505,5 @@ if(!document.querySelector('.slide.active')){
 })();
 
 // debug block removed
+
 

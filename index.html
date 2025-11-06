@@ -8,11 +8,19 @@
   <style>
     /* Slide 3 clean reset: hide decorative overlays, center content, readable type */
     .slide[data-id="3"] { position:relative; background:#000 !important; }
-    .slide[data-id="3"]::before, .slide[data-id="3"]::after { display:none !important; content:none !important; }
     .slide[data-id="3"] .bg.bands-soft, .slide[data-id="3"] .bg.grid-soft, .slide[data-id="3"] .pixel-scan-tilt, .slide[data-id="3"] .chroma-wash, .slide[data-id="3"] .wipe, .slide[data-id="3"] .flicker { display:none !important; opacity:0 !important; background:none !important; }
     .slide[data-id="3"] .center { display:flex; align-items:center; justify-content:center; }
     .slide[data-id="3"] .concept { max-width:90% !important; padding:12px !important; box-sizing:border-box; position:relative; transform:none !important; }
-    .slide[data-id="3"] .concept .title { font-size:clamp(18px,4vw,28px); color:#cfe1f2; margin:0 0 8px; text-align:left; }
+    .slide[data-id="3"] .concept .title { 
+      font-size:clamp(18px,4vw,28px); 
+      color:#cfe1f2; 
+      margin:0 0 8px; 
+      text-align:left;
+      text-shadow: 
+        -1px 0 var(--cyan), 
+        1px 0 var(--mag),
+        0 0 12px rgba(77, 252, 255, 0.3) !important;
+    }
     .slide[data-id="3"] .concept .body { font-size:clamp(12px,2.2vw,16px); color:#cfe1f2; line-height:1.5; margin:0 0 12px; text-align:left; }
     .slide[data-id="3"] .btn-row { margin-top:12px; display:flex; gap:12px; justify-content:center; }
   </style>
@@ -24,8 +32,18 @@
       <div class="diag" aria-hidden="true" id="diag"></div>
 
       <div class="slides" id="slides">
+        <!-- LANGUAGE SELECTION SLIDE -->
+        <section class="slide lang-slide" data-id="lang" id="langSlide">
+          <div class="center" style="display: flex; align-items: center; justify-content: center; height: 100%;">
+            <div style="display: flex; flex-direction: column; gap: 24px; align-items: center;">
+              <button type="button" class="btn lang-btn" id="langEN">English</button>
+              <button type="button" class="btn lang-btn" id="langES">Español</button>
+            </div>
+          </div>
+        </section>
+        
         <!-- SLIDE 0 -->
-        <section class="slide active" data-id="0">
+        <section class="slide" data-id="0">
           <!-- swapped: use pixel-scan-tilt here (was on slide 1) -->
           <div class="bg pixel-scan-tilt" aria-hidden="true"></div>
           <div class="center">
@@ -80,13 +98,13 @@
               <h1 class="t-main">game mechanics</h1>
 
               <div class="body">
-                <p>The experience is designed for up to thirty participants per session. Each player begins from a different point in the city, embodying a unique fictional character inspired by recognizable archetypes such as tenants, developers, tourists, activists, or bureaucrats.</p>
+                <p>The experience is designed for up to <span class="typing-ylw">thirty participants</span> per session. Each player begins from a different point in the city, embodying a unique fictional character inspired by recognizable archetypes such as tenants, developers, tourists, activists, or bureaucrats.</p>
 
-                <p>Each participant follows a path made up of eleven urban scenes, across flexible locations like libraries, schools, plazas, cemeteries, and construction sites. Players move independently, guided by a mobile app that activates content based on their location and decisions. The structure creates the illusion of freedom while subtly revealing a closed system beneath it.</p>
+                <p>Each participant follows a path made up of eleven urban scenes, across flexible locations like libraries, schools, plazas, cemeteries, and construction sites. Players move independently, guided by a <span class="typing-cyan">mobile app</span> that activates content based on their location and decisions. The structure creates the <span class="typing-mag">illusion of freedom</span> while subtly revealing a closed system beneath it.</p>
 
-                <p>Although each journey is individual, the experience includes scenes shared with others and synchronized events that affect all participants. Players navigate the city as if playing against the app itself, testing its control.</p>
+                <p>Although each journey is individual, the experience includes scenes shared with others and <span class="typing-cyan">synchronized events</span> that affect all participants. Players navigate the city as if playing against the app itself, testing its <span class="typing-ylw">control</span>.</p>
 
-                <p>In parallel, each carries a printed booklet with optional narrative detours. In the final scene, everyone gathers at a high point in the city where the collective result of their actions is revealed.</p>
+                <p>In parallel, each carries a <span class="typing-mag">printed booklet</span> with optional narrative detours. In the final scene, everyone gathers at a high point in the city where the <span class="typing-cyan">collective result</span> of their actions is revealed.</p>
 
                 <p>To give you a silly example, choose one:</p>
               </div>
@@ -148,9 +166,9 @@
               <div class="media-placeholder" id="slide7Media" aria-hidden="true"></div>
 
               <div class="btn-row slide7-actions" style="margin-top:18px">
-                <button class="btn fade-item" id="slide7Btn1" type="button">It’s called progress. Human beings need cars to survive and thrive, and they need places to put their cars to sleep.</button>
-                <button class="btn fade-item" id="slide7Btn2" type="button">Try to find a way to make both things work together. Negotiate, resign some things, get other things.</button>
-                <button class="btn fade-item" id="slide7Btn3" type="button">It’s time for the armed revolution, we have been waiting too long, this was the last straw.</button>
+                <button class="btn fade-item" id="slide7Btn1" type="button">It's called <span class="typing-ylw">progress</span>. Human beings need cars to survive and thrive, and they need places to put their cars to sleep.</button>
+                <button class="btn fade-item" id="slide7Btn2" type="button">Try to find a way to make both things work together. <span class="typing-cyan">Negotiate</span>, resign some things, get other things.</button>
+                <button class="btn fade-item" id="slide7Btn3" type="button">It's time for the <span class="typing-mag">armed revolution</span>, we have been waiting too long, this was the last straw.</button>
               </div>
             </div>
           </div>
@@ -163,13 +181,13 @@
             <div class="concept">
               <h2 class="title">team</h2>
               <div class="body" id="slide8Body">
-                <p>unreal state is a project directed by Marcos Krivocapich, a stage and multimedia artist whose work explores hybrid formats that combine theater, technology, and political critique.</p>
+                <p>unreal state is a project directed by <span class="typing-cyan">Marcos Krivocapich</span>, a stage and multimedia artist whose work explores <span class="typing-mag">hybrid formats</span> that combine theater, technology, and political critique.</p>
 
-                <p>Over the past five years, he has collaborated with Canadian artists Milton Lim and Patrick Blenkarn, known for their interactive and digital performance work. He is currently co-creating a new piece with them, supported by the Canada Council for the Arts.</p>
+                <p>Over the past five years, he has collaborated with Canadian artists Milton Lim and Patrick Blenkarn, known for their <span class="typing-ylw">interactive and digital</span> performance work. He is currently co-creating a new piece with them, supported by the Canada Council for the Arts.</p>
 
-                <p>This project involves an international team of collaborators from Argentina, Chile, Germany, and Italy, with experience in performing arts, interactive systems, and dramaturgy. The team includes Catalina Lescano (AR), writer and researcher; León Siewert-Langhoff (DE), programmer and dramaturg; Fabián Andrade (CL), designer and game developer; Corrado Russo (IT), international producer; and Carola Zelaschi (AR), composer and sound designer.</p>
+                <p>This project involves an <span class="typing-cyan">international team</span> of collaborators from Argentina, Chile, Germany, and Italy, with experience in performing arts, interactive systems, and dramaturgy. The team includes Catalina Lescano (AR), writer and researcher; León Siewert-Langhoff (DE), programmer and dramaturg; Fabián Andrade (CL), designer and game developer; Corrado Russo (IT), international producer; and Carola Zelaschi (AR), composer and sound designer.</p>
 
-                <p>unreal state is supported by Mobilità delle arti (Italy) and has been selected for the production phase of the In Situ network (2025). It will include a residency and co production period with partner institutions and a public presentation of a prototype at FiraTàrrega, Spain, in September 2026.</p>
+                <p>unreal state is supported by Mobilità delle arti (Italy) and has been selected for the production phase of the <span class="typing-mag">In Situ network</span> (2025). It will include a residency and co production period with partner institutions and a public presentation of a <span class="typing-ylw">prototype</span> at FiraTàrrega, Spain, in September 2026.</p>
               </div>
 
               <div class="btn-row slide8-actions" style="margin-top:18px">
@@ -204,7 +222,7 @@
             <div class="scan">
               <pre id="scanAll"></pre>
               <div class="btn-row" style="margin-top:18px">
-                <button class="btn next" id="scanNext" type="button" style="display:none">I'll try</button>
+                <button class="btn next" id="scanNext" type="button" style="display:none"></button>
               </div>
             </div>
           </div>
@@ -217,10 +235,10 @@
                   <div class="concept">
                     <h2 class="title">concept</h2>
                     <div class="body">
-                      <p class="lead">What if I told you I know what you want before you know it?</p>
-                      <p>unreal state is an immersive urban performance disguised as a role-playing game. Participants move alone through the city as fictional characters, guided by a mobile app that speaks in the voice of the King CEO, an algorithmic figure that claims to know players' desires in advance. The city becomes a game board where common urban spaces such as parks, schools, cemeteries, and construction sites serve as narrative checkpoints.</p>
-                      <p>Along the way, each player receives a printed choose your own adventure booklet, offering analog detours that resist the logic of the system. The story unfolds through individual actions and encounters, but the outcome is revealed collectively in a final scene from a high point in the city, where players see the full map for the first time.</p>
-                      <p>Blending digital control with performative agency, unreal state reflects on how algorithms, speculation, and corporate systems shape contemporary urban life.</p>
+                      <p class="lead">What if I told you I know what you <span class="typing-cyan">want</span> before you know it?</p>
+                      <p>unreal state is an <span class="typing-mag">immersive</span> urban performance disguised as a role-playing game. Participants move alone through the city as fictional characters, guided by a mobile app that speaks in the voice of the <span class="typing-cyan">King CEO</span>, an <span class="typing-ylw">algorithmic</span> figure that claims to know players' desires in advance. The city becomes a game board where common urban spaces such as parks, schools, cemeteries, and construction sites serve as narrative checkpoints.</p>
+                      <p>Along the way, each player receives a printed choose your own adventure booklet, offering <span class="typing-mag">analog detours</span> that resist the logic of the system. The story unfolds through individual actions and encounters, but the outcome is revealed <span class="typing-cyan">collectively</span> in a final scene from a high point in the city, where players see the full map for the first time.</p>
+                      <p>Blending <span class="typing-ylw">digital control</span> with performative agency, unreal state reflects on how <span class="typing-mag">algorithms</span>, speculation, and corporate systems shape contemporary urban life.</p>
                     </div>
                     <div class="btn-row" style="margin-top:20px">
                       <button class="btn external" id="wantLink" type="button">ok, let's see, what do i want?</button>
@@ -252,7 +270,6 @@
       </div>
     </div>
   </div>
-  <div class="syslog" id="syslog" role="status" aria-live="polite"></div>
 
   <script src="script.js" defer></script>
 </body>
