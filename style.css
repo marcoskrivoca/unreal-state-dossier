@@ -167,8 +167,8 @@ html,body{height:100%;background:var(--bg);margin:0;color:var(--fg);font-family:
 
 /* slides wrapper */
 .slides{position:absolute;inset:0;display:grid;place-items:center;z-index:5}
-.slide{position:absolute;inset:0;display:grid;grid-template-rows:1fr auto;opacity:0;pointer-events:none;transform:translateY(6px) scale(.985);transition:opacity .25s ease, transform .25s ease}
-.slide.active{opacity:1;pointer-events:auto;transform:translateY(0) scale(1)}
+.slide{position:absolute;inset:0;display:grid;grid-template-rows:1fr auto;opacity:0;pointer-events:none;transition:opacity .25s ease}
+.slide.active{opacity:1;pointer-events:auto}
 
 /* common bg container */
 .bg{position:absolute;inset:0;z-index:1;pointer-events:none;user-select:none}
@@ -920,14 +920,14 @@ html,body{height:100%;background:var(--bg);margin:0;color:var(--fg);font-family:
 .glitch-text .layer.c2{ color: rgba(255,88,246,0.92); transform: translate(8px,3px); opacity:0.9 }
 
 @keyframes glitchPulse{
-  0%{ opacity:0; filter:none; transform:scale(1) }
-  8%{ opacity:1; filter:contrast(140%) saturate(1.2); transform:scale(1.02) }
-  18%{ transform:translateX(-8px) scale(1.01); }
-  28%{ transform:translateX(10px) scale(0.996); }
-  40%{ transform:translateX(-4px) scale(1.003); }
+  0%{ opacity:0; filter:none }
+  8%{ opacity:1; filter:contrast(140%) saturate(1.2) }
+  18%{ filter:contrast(120%) }
+  28%{ filter:contrast(130%) }
+  40%{ filter:contrast(115%) }
   60%{ filter:contrast(90%) brightness(.8) }
-  78%{ transform:translateX(6px) scale(1.002) }
-  100%{ opacity:0; filter:none; transform:scale(1) }
+  78%{ filter:contrast(110%) }
+  100%{ opacity:0; filter:none }
 }
 
 /* stronger white / black flashes and brief invert for a broken-screen feel */
@@ -974,7 +974,7 @@ html,body{height:100%;background:var(--bg);margin:0;color:var(--fg);font-family:
 
 /* ------------------------- Slide 7: eliminate rectangle, center & enlarge text, buttons below ------------------------- */
 .slide[data-id="7"]{ position:relative }
-.slide[data-id="7"] .center{ display:flex !important; flex-direction:column !important; align-items:center !important; justify-content:flex-start !important; padding-top: clamp(20px, 6vh, 40px) !important; height:100% !important }
+.slide[data-id="7"] .center{ display:flex !important; flex-direction:column !important; align-items:center !important; justify-content:flex-start !important; padding-top: clamp(20px, 6vh, 40px) !important; padding-bottom: 40px !important; height:100% !important; overflow-y:auto !important; overflow-x:hidden !important; -webkit-overflow-scrolling:touch !important }
 .slide[data-id="7"] .center > .concept{ width:100% !important; max-width:94% !important; box-sizing:border-box !important; padding:12px !important; display:flex !important; flex-direction:column !important; align-items:center !important; text-align:center !important; height:auto !important; margin:0 auto !important }
 
 /* remove the rectangular media placeholder so the text sits alone */
@@ -1717,16 +1717,16 @@ html,body{height:100%;background:var(--bg);margin:0;color:var(--fg);font-family:
   display:block !important; width:28px !important; height:28px !important; flex:0 0 28px !important; margin:0 !important; opacity:0 !important;
 }
 
-/* chat frame: non-scrolling frame, messages positioned from the bottom
-   and reserved bottom padding to visually connect the last message to the
-   absolute button. JS will nudge `.chat-list` via margin-top during reveal. */
+/* chat frame: scrollable frame for long messages, with reserved bottom space for button */
 .slide[data-id="9"] .chat-frame{
-  overflow: hidden !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  -webkit-overflow-scrolling: touch !important;
   display:flex !important;
   flex-direction:column !important;
   align-items:stretch !important;
   box-sizing: border-box !important;
-  padding: 12px 10px 120px 10px !important; /* reserve bottom space for button */
+  padding: 12px 10px 140px 10px !important; /* extra bottom space for button */
   max-height: calc(100% - 48px) !important;
   background: radial-gradient(ellipse at center, rgba(77,252,255,0.02) 0%, transparent 70%) !important;
 }

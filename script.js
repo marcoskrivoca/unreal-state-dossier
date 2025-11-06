@@ -770,8 +770,8 @@ document.addEventListener('click', (e)=>{
         }
       } else { /* no next slide: return to concept */ try{ swipeTo(3); }catch(e){ goToSlide(3); } }
     } else {
-      // no -> go to last slide in DOM order
-      const lastId = ids[ids.length-1]; if(lastId){ try{ swipeTo(lastId); }catch(e){ goToSlide(lastId); } }
+      // no -> go to slide 10 (contact slide)
+      try{ swipeTo(10); }catch(e){ goToSlide(10); }
     }
     return;
   }
@@ -843,7 +843,7 @@ const ENDINGS_ES = {
   cemetery: {
     progress: `Parece que la preocupación general por el bienestar de los autos ha tenido un efecto contagioso. Ahora duermen sobre las tumbas, calentados por el suave zumbido de los motores.\n\nComen y se bañan donde antes se lloraba. Cuando un auto atropella a alguien, es la persona atropellada quien termina siendo demandada.\n\nPorque este es el mundo de los autos, bebé, y los muertos finalmente descansan en paz bajo los semáforos.\n\nSaltemos juntos sobre el gracioso rugido de doble motor del arcoíris del progreso, y riamos y lloremos con todos los que quedaron debajo.\n\nHe pasado un tiempo maravilloso. Realmente espero volver a verte.`,
     negotiate: `Sorprendentemente, tu idea fue bien recibida. Los dueños de estacionamientos comenzaron a fusionarse con cementerios. Ahora la gente alquila tumbas por hora y estaciona por minuto.\n\nSi te atrasas con el pago, tu lugar de descanso se convierte en un espacio para autos. Todo es un posible estacionamiento, a menos que pagues para volverlo humano.\n\nResulta que a los seres humanos les encanta pagar por lo que antes era gratis. Negociar es dejar que otro fije el precio.\n\nHe pasado un tiempo maravilloso. Realmente espero volver a verte.`,
-    revolution: `Reuniste a los primeros camaradas entre las tumbas. Hablaste con los huesos y les prometiste resurrección a través de la rabia.\n\nHemos emitido una orden de arresto en tu contra y enviado oficiales para hacerla cumplir. Es una pena que termine así, pero no toleraré enfrentamientos armados en tierra sagrada. Por favor, no llores ni te avergüences.\n\nPuedo prometerte que haremos de ti un mártir. Un símbolo controlado de la revuelta al que la gente pueda admirar y, al mismo tiempo, temer.\n\nHe pasado un tiempo maravilloso. Realmente espero volver a verte.`
+    revolution: `Reuniste a los primeros camaradas entre las tumbas. Hablaste con los huesos y les prometiste resurrección a través de la rabia.\n\nHemos emitido una orden de arresto en tu contra y enviado oficiales para hacerla cumplir. Es una pena que termine así, pero no toleraré enfrentamientos armados en mi territorio. Por favor, no llores ni te avergüences.\n\nPuedo prometerte que haremos de ti un mártir. Un símbolo controlado de la revuelta al que la gente pueda admirar y, al mismo tiempo, temer.\n\nHe pasado un tiempo maravilloso. Realmente espero volver a verte.`
   },
   museum: {
     progress: `Parece que la preocupación general por el bienestar de los autos ha tenido un efecto contagioso. Los estacionamientos crecieron hasta alcanzar los museos.\n\nLas estatuas desaparecieron, reemplazadas por estaciones de carga. Las pinturas fueron repintadas con el color del combustible. Si un auto atropella a alguien, es la persona atropellada quien termina siendo demandada.\n\nPorque este es el mundo de los autos, bebé, y sé que eso es lo que querías.\n\nSaltemos juntos sobre el gracioso rugido de doble motor del arcoíris del progreso, y riamos y lloremos con todos los que quedaron debajo.\n\nHe pasado un tiempo maravilloso. Realmente espero volver a verte.`,
@@ -925,8 +925,14 @@ function populateSlide9(){
         }catch(e){ /* ignore measurement errors */ }
 
         // wait 2000ms before showing the next bubble so the user can read
-        await wait(2000);
+        // (but skip this wait after the last message)
+        if (i < paragraphs.length - 1) {
+          await wait(2000);
+        }
       }
+      
+      // After the last message, give the user time to read it before showing the button
+      await wait(2500);
 
   // Sequence complete â€” give layout a short moment to settle (fonts and
   // transitions) before making the final measurement and revealing buttons.
@@ -1122,25 +1128,25 @@ const LANG = {
       btnNiceUrl: 'https://open.spotify.com/intl-es/track/1x5sYLZiu9r5E43kMlt9f8?si=1b4cea68c83a49af'
     },
     slide6: {
-      title: 'A question:',
-      para1: 'Do we, human beings, need a conceptual framework to understand ourselves and our place in the universe?',
-      para2: 'Are we prisoners of this framework, or do we have the ability to create new frameworks as we please?',
-      para3: 'What do you think?',
+      title: 'conceptual framework',
+      para1: `unreal state stages a world shaped by <span class="typing-cyan">algorithmic governance</span> and the collapse of collective fictions. It unfolds within the infrastructures that now host power and spectacle. Guided by the <span class="typing-ylw">King CEO</span>, a voice that merges technocratic authority with monarchical seduction, the experience draws on imaginaries proposed by Curtis Yarvin and Nick Land, where democracy is replaced by <span class="typing-mag">streamlined control</span>. This performance uses the same devices that shape contemporary behavior. It explores how interactive media and mobile technologies have become new rehearsal spaces for obedience.`,
+      para2: `As Benjamin Bratton suggests in The Stack, <span class="typing-cyan">planetary-scale computation</span> operates across layers. unreal state turns these layers into <span class="typing-ylw">narrative space</span>. Participants navigate a system that observes, anticipates, and absorbs their decisions. But within that structure, something else begins to form. Not escape, but <span class="typing-mag">rhythm, friction, or pause</span>.`,
+      para3: `Shall we continue?`,
       btnYes: 'yes',
       btnNo: 'no'
     },
     slide7: {
-      typedText: 'You were presented with a conceptual framework.\n\nYou exist in a city where parking lots are more valuable than libraries, cemeteries, or museums.\n\nHow do you react?',
+      typedText: 'I know you want to take a well-deserved break\nafter so much serious reading.\n\nBut there\'s an incisive part of your brain that keeps\nasking:\n\nWhat are we going to do about this parking lot situation?\n',
       btnProgress: 'It\'s called <span class="typing-ylw">progress</span>. Human beings need cars to survive and thrive, and they need places to put their cars to sleep.',
       btnNegotiate: 'Try to find a way to make both things work together. <span class="typing-cyan">Negotiate</span>, resign some things, get other things.',
       btnRevolution: 'It\'s time for the <span class="typing-mag">armed revolution</span>, we have been waiting too long, this was the last straw.'
     },
     slide8: {
-      title: 'Narrative causality',
-      para1: 'To understand our narratives, we need clear cause-and-effect relationships. Life, however, doesn\'t work that way.',
-      para2: 'Life is entropic, and ultimately directionless. That\'s one of the reasons we tell ourselves stories, to try and make sense of it all.',
-      para3: 'Complex stories benefit from structure because they encourage causality. The structure chosen serves the causality the author wants to convey.',
-      para4: 'That causality works backward. It traces the result to find a cause. Or more importantly, which cause. And even more importantly, how that cause was determined.',
+      title: 'team',
+      para1: `unreal state is a project led by <span class="typing-cyan">Marcos Krivocapich</span>, a scenic and multimedia artist whose work explores <span class="typing-mag">hybrid formats</span> combining theater, technology, and political critique.`,
+      para2: `Over the past five years, he has collaborated with Canadian artists Milton Lim and Patrick Blenkarn, known for their <span class="typing-ylw">interactive and digital</span> performance work. He is currently co-creating a new piece with them, supported by the Canada Council for the Arts.`,
+      para3: `This project involves an <span class="typing-cyan">international team</span> of collaborators from Argentina, Chile, Germany, and Italy, with expertise in performing arts, interactive systems, and dramaturgy. The team includes Catalina Lescano (AR), writer and researcher; León Siewert-Langhoff (DE), programmer and dramaturg; Fabián Andrade (CL), game designer and developer; Corrado Russo (IT), international producer; and Carola Zelaschi (AR), composer and sound designer.`,
+      para4: `unreal state is supported by Mobilità delle arti (Italy) and has been selected for the production phase of the <span class="typing-mag">In Situ network</span> (2025). It will include a residency and co-production period with partner institutions and a public presentation of a <span class="typing-ylw">prototype</span> at FiraTàrrega, Spain, in September 2026.`,
       btnContinue: 'okay, great, but what about the parking lot?'
     },
     slide9: {
@@ -1259,8 +1265,8 @@ const LANG = {
     },
     slide6: {
       title: 'marco conceptual',
-      para1: `unreal state escenifica un mundo moldeado por la gobernanza algorítmica y el colapso de las ficciones colectivas. Se despliega dentro de las infraestructuras que ahora albergan poder y espectáculo. Guiado por el Rey CEO, una voz que fusiona autoridad tecnocrática con seducción monárquica, la experiencia se inspira en imaginarios propuestos por Curtis Yarvin y Nick Land, donde la democracia es reemplazada por control optimizado. Esta performance usa los mismos dispositivos que moldean el comportamiento contemporáneo. Explora cómo los medios interactivos y las tecnologías móviles se han convertido en nuevos espacios de ensayo para la obediencia.`,
-      para2: `Como sugiere Benjamin Bratton en The Stack, la computación a escala planetaria opera a través de capas. unreal state convierte estas capas en espacio narrativo. Los participantes navegan un sistema que observa, anticipa y absorbe sus decisiones. Pero dentro de esa estructura, algo más comienza a formarse. No escape, sino ritmo, fricción o pausa.`,
+      para1: `unreal state escenifica un mundo moldeado por la <span class="typing-cyan">gobernanza algorítmica</span> y el colapso de las ficciones colectivas. Se despliega dentro de las infraestructuras que ahora albergan poder y espectáculo. Guiado por el <span class="typing-ylw">Rey CEO</span>, una voz que fusiona autoridad tecnocrática con seducción monárquica, la experiencia se inspira en imaginarios propuestos por Curtis Yarvin y Nick Land, donde la democracia es reemplazada por <span class="typing-mag">control optimizado</span>. Esta performance usa los mismos dispositivos que moldean el comportamiento contemporáneo. Explora cómo los medios interactivos y las tecnologías móviles se han convertido en nuevos espacios de ensayo para la obediencia.`,
+      para2: `Como sugiere Benjamin Bratton en The Stack, la <span class="typing-cyan">computación a escala planetaria</span> opera a través de capas. unreal state convierte estas capas en <span class="typing-ylw">espacio narrativo</span>. Los participantes navegan un sistema que observa, anticipa y absorbe sus decisiones. Pero dentro de esa estructura, algo más comienza a formarse. No escape, sino <span class="typing-mag">ritmo, fricción o pausa</span>.`,
       para3: `¿Continuamos?`,
       btnYes: 'sí',
       btnNo: 'no'
@@ -1472,15 +1478,35 @@ function applySlideTranslations(lang) {
 }
 
 // Initialize language selection
+// Request fullscreen function
+function requestFullscreen() {
+  const elem = document.documentElement;
+  if (elem.requestFullscreen) {
+    elem.requestFullscreen().catch(err => {
+      console.log('Fullscreen request failed:', err);
+    });
+  } else if (elem.webkitRequestFullscreen) { /* Safari */
+    elem.webkitRequestFullscreen();
+  } else if (elem.msRequestFullscreen) { /* IE11 */
+    elem.msRequestFullscreen();
+  }
+}
+
 window.addEventListener('DOMContentLoaded', () => {
   const langEN = document.getElementById('langEN');
   const langES = document.getElementById('langES');
   
   if (langEN) {
-    langEN.addEventListener('click', () => selectLanguage('en'));
+    langEN.addEventListener('click', () => {
+      requestFullscreen();
+      selectLanguage('en');
+    });
   }
   if (langES) {
-    langES.addEventListener('click', () => selectLanguage('es'));
+    langES.addEventListener('click', () => {
+      requestFullscreen();
+      selectLanguage('es');
+    });
   }
   
   // Ensure language slide is active on load
