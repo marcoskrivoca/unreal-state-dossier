@@ -1708,7 +1708,20 @@ html,body{height:100%;background:var(--bg);margin:0;color:var(--fg);font-family:
 */
 
 /* container wiring */
-.slide[data-id="9"] .concept{ position:relative !important; z-index:3 }
+.slide[data-id="9"] .center{ 
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  -webkit-overflow-scrolling: touch !important;
+  height: 100% !important;
+  max-height: 100% !important;
+}
+.slide[data-id="9"] .concept{ 
+  position:relative !important; 
+  z-index:3 !important;
+  height: 100% !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
 
 /* avatars: hide real avatars, keep the typing avatar present but invisible
    in layout so the typing indicator does not cause the cyan square flash */
@@ -1726,8 +1739,10 @@ html,body{height:100%;background:var(--bg);margin:0;color:var(--fg);font-family:
   flex-direction:column !important;
   align-items:stretch !important;
   box-sizing: border-box !important;
-  padding: 12px 10px 140px 10px !important; /* extra bottom space for button */
-  max-height: calc(100% - 48px) !important;
+  padding: 12px 10px 180px 10px !important; /* extra bottom space for button - increased for mobile */
+  height: 100% !important;
+  max-height: 100% !important;
+  position: relative !important;
   background: radial-gradient(ellipse at center, rgba(77,252,255,0.02) 0%, transparent 70%) !important;
 }
 
@@ -1807,18 +1822,23 @@ html,body{height:100%;background:var(--bg);margin:0;color:var(--fg);font-family:
    `.messages-done` then `.show` to reveal it after messages finish. */
 .slide[data-id="9"] .btn-row{
   display:flex !important;
-  position:absolute !important;
+  position:fixed !important;
   left:50% !important;
-  bottom:22px !important;
+  bottom:32px !important;
   transform:translateX(-50%) translateY(6px) !important;
   gap:10px !important;
   justify-content:center !important;
   width: min(92%, 360px) !important;
-  z-index: 250 !important;
+  z-index: 9999 !important;
   opacity: 0 !important;
   pointer-events: none !important;
   transition: opacity .28s ease, transform .28s cubic-bezier(.2,.9,.2,1) !important;
   visibility: hidden !important;
+  background: rgba(0, 0, 0, 0.85) !important;
+  padding: 12px !important;
+  border-radius: 8px !important;
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
 }
 .slide[data-id="9"].messages-done .btn-row.show{ opacity:1 !important; pointer-events: auto !important; transform:translateX(-50%) translateY(0) !important; visibility: visible !important }
 
