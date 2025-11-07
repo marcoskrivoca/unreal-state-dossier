@@ -130,6 +130,9 @@ function scanWipeTint(color, next){
 }
 /* black flicker (1â†’2) */
 function flickerTo(next){
+  // Play glitch sound for flicker effect
+  try{ playGlitchSound(); }catch(e){}
+  
   const f = document.createElement('div');
   f.className = 'flicker run';
   phone.appendChild(f);
@@ -181,8 +184,14 @@ function mapReveal(callback){
    returns a Promise that resolves after navigation completes. The overlay animates
    and then calls goToSlide(nextId). */
 function glitchTo(nextId){
+  console.log('[GLITCH] glitchTo called with nextId:', nextId);
   return new Promise(res=>{
     try{
+      // Play glitch sound
+      console.log('[GLITCH] Playing glitch sound');
+      try{ playGlitchSound(); }catch(e){ console.error('[GLITCH] Sound error:', e); }
+      
+      console.log('[GLITCH] Creating glitch overlay');
       const o = document.createElement('div'); o.className='glitch-overlay';
       // include layered text that says 'interruption' â€” animated via CSS
       o.innerHTML = '<div class="back"></div><div class="g1"></div><div class="g2"></div><div class="noise"></div>' +
@@ -191,13 +200,46 @@ function glitchTo(nextId){
                       '<span class="layer c1">interruption</span>' +
                       '<span class="layer c2">interruption</span>' +
                     '</div>';
-  phone.appendChild(o);
+  
+  // Append to body instead of phone to ensure visibility
+  document.body.appendChild(o);
+  console.log('[GLITCH] Overlay appended to body. Element:', o);
+  
+  // Position it to cover entire viewport with VERY aggressive styles
+  o.style.cssText = `
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    opacity: 1 !important;
+    z-index: 2147483647 !important;
+    pointer-events: none !important;
+    background-color: rgba(0, 0, 0, 0.95) !important;
+    display: block !important;
+    visibility: visible !important;
+  `;
+  
   // make this overlay heavy: add flash + invert classes to get white/black flashes + invert
   o.classList.add('flash'); o.classList.add('invert');
-  // mark phone as glitching so underlying slides are hidden and phone background is forced to black
+  
+  console.log('[GLITCH] Overlay styled with maximum z-index (2147483647)');
+  console.log('[GLITCH] Computed styles:', {
+    position: window.getComputedStyle(o).position,
+    zIndex: window.getComputedStyle(o).zIndex,
+    opacity: window.getComputedStyle(o).opacity,
+    display: window.getComputedStyle(o).display,
+    backgroundColor: window.getComputedStyle(o).backgroundColor
+  });
+  
+  // mark phone as glitching
   try{ phone.classList.add('glitching'); phone.style.backgroundColor = '#000'; }catch(e){}
+  
   // play
   void o.offsetWidth; o.classList.add('run');
+  console.log('[GLITCH] Animation started. Overlay MUST be visible now!');
       // When the overlay plays, navigate to next slide while the overlay is visible
       // so we don't flash the previous slide at the end. Remove overlay after
       // a short delay once navigation has occurred and new slide has had time
@@ -238,6 +280,9 @@ function enterSlide7(){
 
   // small delay so the slide becomes active visually
   setTimeout(()=>{
+    // Play voice sound when typing starts
+    try{ playSlide07VoiceSound(); }catch(e){}
+    
     typeAll(host, text, msPerChar).then(()=>{
       // reveal media placeholder (class-driven)
       if(media){ media.classList.add('visible'); }
@@ -270,6 +315,10 @@ function populateSlide5(which){
   const nearest = document.getElementById('nearestBtn');
   const read  = document.getElementById('readBtn');
   if(!body||!nearest||!read) return;
+  
+  // Play location-specific sound
+  try{ playSlide05Sound(which); }catch(e){}
+  
   if(which==='library'){
     const lang = state.lang || 'en';
     const t = LANG[lang].slide5.library;
@@ -580,6 +629,9 @@ function enterSlide2(){
   void loaderRight.offsetWidth; loaderRight.classList.add('play');
 
   typeAll(pre, fullText, msPerChar, renderScanLive).then(()=>{
+    // Stop typing sound when animation completes
+    try{ stopSlide02TypingSound(); }catch(e){}
+    
     // Clear the failsafe so button is not shown twice
     clearTimeout(failsafeTimer);
 
@@ -660,8 +712,13 @@ function showSectionLoader(ms, nextId){
       // remains visible, then fade the overlay and resolve.
       setTimeout(()=>{
         try{ if(typeof nextId !== 'undefined' && nextId !== null) goToSlide(nextId); }catch(e){}
-        wrap.style.transition = 'opacity .28s ease'; wrap.style.opacity = '0';
-        setTimeout(()=>{ try{ wrap.remove(); }catch(_){}; res(); }, 360);
+        // Stop the loading sound when slide appears
+        try{ stopSlide03LoadingSound(); }catch(e){}
+        // Give slide 3 a moment to render fully before fading the overlay
+        setTimeout(()=>{
+          wrap.style.transition = 'opacity .28s ease'; wrap.style.opacity = '0';
+          setTimeout(()=>{ try{ wrap.remove(); }catch(_){}; res(); }, 360);
+        }, 100);
       }, Math.max(220, ms));
     }catch(e){ res(); }
   });
@@ -679,6 +736,8 @@ function onChoice(val){
     title.classList.remove('ack'); void title.offsetWidth; title.classList.add('ack');
   }
   const edge = (val==='agree') ? getComputedStyle(document.documentElement).getPropertyValue('--cyan') || '#4dfcff' : getComputedStyle(document.documentElement).getPropertyValue('--mag') || '#ff58f6';
+  // Play transition sound
+  try{ playSlide01Sound(); }catch(e){}
   // Start showing slide 1 immediately so its entrance can overlap the wipe.
   // Call goToSlide first because goToSlide() runs clearTransientOverlays();
   // creating the wipe before goToSlide led to the new wipe being removed
@@ -698,11 +757,21 @@ window.onChoice = onChoice;
 document.addEventListener('click', (e)=>{
   const btn = e.target && e.target.closest && e.target.closest('button.btn');
   if(!btn) return;
+  
+  // Play button sound for every button click
+  try{ playButtonSound(); }catch(err){}
+  
   try{ const rect = slidesWrap.getBoundingClientRect(); addRipple(e.clientX-rect.left, e.clientY-rect.top); }catch(_){ }
   if(btn.classList.contains('agree')) return onChoice('agree');
   if(btn.classList.contains('disagree')) return onChoice('disagree');
-  if(btn.classList.contains('start')){ return flickerTo(()=>{ goToSlide(2); }); }
+  if(btn.classList.contains('start')){ 
+    try{ playSlide02Sounds(); }catch(e){}
+    return flickerTo(()=>{ goToSlide(2); }); 
+  }
   if(btn.id==='scanNext'){
+    // Play loading sound for slide 2->3 transition
+    console.log('[AUDIO] Playing slide 3 loading sound');
+    try{ playSlide03LoadingSound(); }catch(e){ console.error('[AUDIO] Error playing slide 3 sound:', e); }
     // Show a centered section loader (3s) between slide 2 and 3 and then
     // navigate directly to slide 3 while the overlay is still visible so
     // there's no flash-back to slide 2.
@@ -757,15 +826,19 @@ document.addEventListener('click', (e)=>{
   if(btn.id==='slide6Yes' || btn.id==='slide6No'){
     const ids = getOrderedSlideIds();
     const curIndex = getCurrentSlideIndex();
+    console.log('[SLIDE6] Current index:', curIndex, 'IDs:', ids);
     if(btn.id==='slide6Yes'){
       const nextIndex = curIndex >= 0 && curIndex < ids.length-1 ? curIndex + 1 : null;
       if(nextIndex !== null){
         const nextId = ids[nextIndex];
+        console.log('[SLIDE6] Next slide ID:', nextId, 'Type:', typeof nextId);
         // If the next slide is the corrupted/interrupt slide (7), play the glitch
         // overlay first so the transition feels like 'something broke'.
         if(String(nextId) === '7'){
-          try{ glitchTo(nextId); }catch(e){ try{ swipeTo(nextId); }catch(_){ goToSlide(nextId); } }
+          console.log('[SLIDE6] Triggering glitchTo for slide 7!');
+          try{ glitchTo(nextId); }catch(e){ console.error('[SLIDE6] glitchTo error:', e); try{ swipeTo(nextId); }catch(_){ goToSlide(nextId); } }
         } else {
+          console.log('[SLIDE6] Normal swipe to slide:', nextId);
           try{ swipeTo(nextId); }catch(e){ goToSlide(nextId); }
         }
       } else { /* no next slide: return to concept */ try{ swipeTo(3); }catch(e){ goToSlide(3); } }
@@ -913,6 +986,9 @@ function populateSlide9(){
         bub.innerHTML = para.replace(/\n/g,'<br>');
         li.appendChild(av); li.appendChild(bub);
         chat.appendChild(li);
+        
+        // Play notification sound for new message
+        try{ playMessageNotificationSound(); }catch(err){}
 
         // reveal with pop-in
         void bub.offsetWidth; bub.classList.add('visible');
@@ -1322,13 +1398,15 @@ function selectLanguage(lang) {
   
   // Animate language slide exit with boot effect
   const langSlide = document.getElementById('langSlide');
+  const slide0 = document.querySelector('.slide[data-id="0"]');
+  
   if (langSlide) {
     langSlide.classList.add('lang-exit');
+    
     setTimeout(() => {
       langSlide.classList.remove('active', 'lang-exit');
       
-      // Activate slide 0 with boot animation
-      const slide0 = document.querySelector('.slide[data-id="0"]');
+      // Activate slide 0 RIGHT AFTER language slide finishes
       if (slide0) {
         slide0.classList.add('active', 'lang-enter');
         // Clean up lang-enter class after animation
@@ -1499,6 +1577,219 @@ function applySlideTranslations(lang) {
 }
 
 // Initialize language selection
+// Background music
+let bgMusic = null;
+let introSound = null;
+let slide01Sound = null;
+let slide02IntroSound = null;
+let slide02TypingSound = null;
+let slide03LoadingSound = null;
+let slide05Sound = null;
+let slide07VoiceSound = null;
+let buttonSound = null;
+let messageNotificationSound = null;
+let glitchSound = null;
+
+function initMusic() {
+  if (!bgMusic) {
+    bgMusic = new Audio('assets/unreal-state-bgs.mp3');
+    bgMusic.loop = true;
+    bgMusic.volume = 0.4;
+    bgMusic.preload = 'auto'; // Preload to reduce gap
+  }
+  if (!introSound) {
+    introSound = new Audio('assets/unreal-state-start.mp3');
+    introSound.volume = 0.4;
+    introSound.preload = 'auto';
+  }
+  if (!slide01Sound) {
+    slide01Sound = new Audio('assets/unreal-state-slide01.mp3');
+    slide01Sound.volume = 0.4;
+    slide01Sound.preload = 'auto';
+  }
+  if (!slide02IntroSound) {
+    slide02IntroSound = new Audio('assets/unreal-state-slide02intro.mp3');
+    slide02IntroSound.volume = 0.4;
+    slide02IntroSound.preload = 'auto';
+  }
+  if (!slide02TypingSound) {
+    slide02TypingSound = new Audio('assets/unreal-state-slide02typing.mp3');
+    slide02TypingSound.loop = true;
+    slide02TypingSound.volume = 0.3; // Slightly lower for typing sound
+    slide02TypingSound.preload = 'auto';
+  }
+  if (!slide03LoadingSound) {
+    slide03LoadingSound = new Audio('assets/unreal-state-loadingslide03.mp3');
+    slide03LoadingSound.volume = 0.4;
+    slide03LoadingSound.preload = 'auto';
+  }
+  if (!slide07VoiceSound) {
+    slide07VoiceSound = new Audio('assets/unreal-state-slide07voice.mp3');
+    slide07VoiceSound.volume = 0.4;
+    slide07VoiceSound.preload = 'auto';
+  }
+  if (!buttonSound) {
+    buttonSound = new Audio('assets/unreal-state-button.mp3');
+    buttonSound.volume = 0.3;
+    buttonSound.preload = 'auto';
+  }
+  if (!messageNotificationSound) {
+    messageNotificationSound = new Audio('assets/unreal-state-messagenotificationslide09.mp3');
+    messageNotificationSound.volume = 0.4;
+    messageNotificationSound.preload = 'auto';
+  }
+  if (!glitchSound) {
+    glitchSound = new Audio('assets/unreal-state-glitch.mp3');
+    glitchSound.volume = 0.5;
+    glitchSound.preload = 'auto';
+  }
+}
+
+function playMusic() {
+  initMusic();
+  
+  // Play intro sound first, then start background music when it ends
+  introSound.play().then(() => {
+    introSound.onended = () => {
+      // Start background music immediately when intro ends
+      bgMusic.currentTime = 0; // Ensure we start from beginning
+      bgMusic.play().catch(err => {
+        console.log('Background music autoplay prevented:', err);
+      });
+    };
+  }).catch(err => {
+    console.log('Audio autoplay prevented:', err);
+    // If intro blocked, try to play background music directly
+    bgMusic.play().catch(e => console.log('Background music also blocked:', e));
+  });
+}
+
+function toggleMute() {
+  if (bgMusic) {
+    bgMusic.muted = !bgMusic.muted;
+    const btn = document.getElementById('muteBtn');
+    if (btn) {
+      // Just update aria-label, CSS handles the visual (♫ with or without X)
+      btn.setAttribute('aria-label', bgMusic.muted ? 'Unmute' : 'Mute');
+    }
+  }
+}
+
+function playSlide01Sound() {
+  initMusic();
+  if (slide01Sound) {
+    slide01Sound.currentTime = 0; // Reset to beginning
+    slide01Sound.play().catch(err => {
+      console.log('Slide 0->1 transition sound prevented:', err);
+    });
+  }
+}
+
+function playSlide02Sounds() {
+  initMusic();
+  if (slide02IntroSound && slide02TypingSound) {
+    // Play intro sound first
+    slide02IntroSound.currentTime = 0;
+    slide02IntroSound.play().then(() => {
+      // When intro ends, start looping typing sound
+      slide02IntroSound.onended = () => {
+        slide02TypingSound.currentTime = 0;
+        slide02TypingSound.play().catch(err => {
+          console.log('Slide 2 typing sound prevented:', err);
+        });
+      };
+    }).catch(err => {
+      console.log('Slide 2 intro sound prevented:', err);
+    });
+  }
+}
+
+function stopSlide02TypingSound() {
+  if (slide02TypingSound) {
+    slide02TypingSound.pause();
+    slide02TypingSound.currentTime = 0;
+  }
+}
+
+function playGlitchSound() {
+  initMusic();
+  if (glitchSound) {
+    glitchSound.currentTime = 0; // Reset to beginning
+    glitchSound.play().catch(err => {
+      console.log('Glitch sound prevented:', err);
+    });
+  }
+}
+
+function playSlide05Sound(which) {
+  initMusic();
+  // Create new audio based on location choice
+  const filename = `assets/unreal-state-slide05${which}.mp3`;
+  if (slide05Sound) {
+    slide05Sound.pause();
+    slide05Sound.currentTime = 0;
+  }
+  slide05Sound = new Audio(filename);
+  slide05Sound.volume = 0.4;
+  slide05Sound.play().catch(err => {
+    console.log('Slide 5 sound prevented:', err);
+  });
+}
+
+function playSlide07VoiceSound() {
+  initMusic();
+  if (slide07VoiceSound) {
+    slide07VoiceSound.currentTime = 0;
+    slide07VoiceSound.play().catch(err => {
+      console.log('Slide 7 voice sound prevented:', err);
+    });
+  }
+}
+
+function playButtonSound() {
+  initMusic();
+  if (buttonSound) {
+    buttonSound.currentTime = 0;
+    buttonSound.play().catch(err => {
+      console.log('Button sound prevented:', err);
+    });
+  }
+}
+
+function playMessageNotificationSound() {
+  initMusic();
+  if (messageNotificationSound) {
+    messageNotificationSound.currentTime = 0;
+    messageNotificationSound.play().catch(err => {
+      console.log('Message notification sound prevented:', err);
+    });
+  }
+}
+
+function playSlide03LoadingSound() {
+  initMusic();
+  if (slide03LoadingSound) {
+    console.log('[AUDIO] Attempting to play slide 3 loading sound');
+    slide03LoadingSound.loop = true; // Loop for duration of transition
+    slide03LoadingSound.currentTime = 0; // Reset to beginning
+    slide03LoadingSound.play().then(() => {
+      console.log('[AUDIO] Slide 3 loading sound playing successfully');
+    }).catch(err => {
+      console.log('[AUDIO] Slide 3 loading sound prevented:', err);
+    });
+  } else {
+    console.log('[AUDIO] slide03LoadingSound is null');
+  }
+}
+
+function stopSlide03LoadingSound() {
+  if (slide03LoadingSound) {
+    slide03LoadingSound.pause();
+    slide03LoadingSound.loop = false;
+    slide03LoadingSound.currentTime = 0;
+  }
+}
+
 // Request fullscreen function (only works on desktop, not mobile browsers)
 function requestFullscreen() {
   // Skip on mobile devices as fullscreen API is not supported
@@ -1525,12 +1816,14 @@ window.addEventListener('DOMContentLoaded', () => {
   if (langEN) {
     langEN.addEventListener('click', () => {
       requestFullscreen();
+      playMusic();
       selectLanguage('en');
     });
   }
   if (langES) {
     langES.addEventListener('click', () => {
       requestFullscreen();
+      playMusic();
       selectLanguage('es');
     });
   }
@@ -1543,6 +1836,25 @@ window.addEventListener('DOMContentLoaded', () => {
     langSlide.classList.add('active');
     slide0.classList.remove('active');
   }
+  
+  // Mute button event listener
+  const muteBtn = document.getElementById('muteBtn');
+  if (muteBtn) {
+    muteBtn.addEventListener('click', toggleMute);
+  }
+  
+  // Periodic glitch sound - sync with CSS animation cycle
+  // The CSS animation runs every 20s and shows glitch at 91%-99%
+  const glitchInterval = 20000; // 20 seconds total cycle
+  const glitchTiming = glitchInterval * 0.91; // Glitch appears at 18.2 seconds (91%)
+  
+  // Play glitch sound every 20 seconds, starting at the 91% mark
+  // First glitch happens at 18.2s, then every 20s after that
+  let glitchTimer = setTimeout(function playPeriodicGlitch() {
+    try{ playGlitchSound(); }catch(err){}
+    // Schedule next glitch in 20 seconds
+    glitchTimer = setTimeout(playPeriodicGlitch, glitchInterval);
+  }, glitchTiming);
 });
 
 // self-test (smoke checks)

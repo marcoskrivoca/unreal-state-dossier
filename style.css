@@ -194,7 +194,14 @@ html,body{height:100%;background:var(--bg);margin:0;color:var(--fg);font-family:
 /* Force Slide 0 title to a single line on typical phone widths. Reduce
    the maximal font-size slightly and prevent wrapping; on very narrow
    screens lower the size further to avoid overflow. */
-.slide[data-id="0"] .title{white-space:nowrap;display:inline-block;overflow:hidden;text-overflow:ellipsis;font-size:clamp(18px,3.2vw,34px)}
+.slide[data-id="0"] .title{
+  white-space:nowrap;
+  display:inline-block;
+  overflow:visible !important;
+  text-overflow:clip;
+  font-size:clamp(18px,3.2vw,34px);
+  max-width: none !important;
+}
 @media (max-width:340px){
   .slide[data-id="0"] .title{font-size:clamp(16px,3.6vw,28px)}
 }
@@ -462,11 +469,39 @@ html,body{height:100%;background:var(--bg);margin:0;color:var(--fg);font-family:
 /* Center slide 0 title and actions exactly in the middle */
 /* Slide 0 center: ensure the title+buttons block is centered both vertically and horizontally */
 .slide[data-id="0"] .center{padding:0; height:100%; display:flex; align-items:center; justify-content:center}
-.slide[data-id="0"] .center > div{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;min-height:auto;width:100%;box-sizing:border-box;padding:0 12px}
+.slide[data-id="0"] .center > div{
+  display:flex !important;
+  flex-direction:column !important;
+  align-items:center !important;
+  justify-content:center !important;
+  gap:12px;
+  min-height:auto;
+  width:100% !important;
+  max-width: 90vw;
+  box-sizing:border-box;
+  padding:0 12px;
+  overflow: visible !important;
+  text-align: center !important;
+}
 .slide[data-id="0"] .center .btn-row{margin-top:6px}
 
-/* Hide the footer/meta for slide 0 so the title and buttons truly sit centered */
-.slide[data-id="0"] .meta{display:block;position:absolute;left:12px;bottom:12px;width:calc(100% - 24px);text-align:left;font-size:12px;opacity:0.92;padding-right:6px;margin:0;align-self:flex-start;padding-left:12px; background: transparent }
+/* Footer for slide 0 positioned at bottom left */
+.slide[data-id="0"] .meta{
+  display:block !important;
+  position:absolute !important;
+  left:12px !important;
+  bottom:12px !important;
+  width:calc(100% - 24px);
+  text-align:left;
+  font-size:12px;
+  opacity:0.92;
+  padding-right:6px;
+  margin:0 !important;
+  padding-left:12px;
+  background: transparent;
+  justify-self: unset !important;
+  align-self: unset !important;
+}
 
 /* subtle scan sweep for slides other than 0: keep overlay muted by default */
 .slide:not([data-id="0"]) .pixel-scan-tilt::after{
@@ -478,14 +513,171 @@ html,body{height:100%;background:var(--bg);margin:0;color:var(--fg);font-family:
 
 @keyframes scanSweep{ 0%{ background-position: 0 0, 0 0, -120% 0 } 100%{ background-position: 0 0, 0 0, 120% 0 } }
 
-/* Ensure the slide 0 container centers content vertically regardless of global grid rows */
-.slide[data-id="0"]{ display:grid; place-items:center }
+/* Restore original slide 0 grid layout */
+.slide[data-id="0"]{ 
+  display:grid; 
+  place-items:center; 
+  position:absolute;
+  inset: 0;
+}
+/* When slide 0 becomes active or lang-enter, show immediately */
+.slide[data-id="0"].active,
+.slide[data-id="0"].lang-enter {
+  opacity: 1 !important;
+}
+
+/* Mute button for slide 0 - music note icon ♫ with CRT style */
+.slide[data-id="0"] .mute-btn {
+  position: absolute !important;
+  top: 44px !important;
+  right: 20px !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  display: block !important;
+  background: transparent;
+  border: none;
+  color: var(--mag);
+  font-size: 32px;
+  width: 36px;
+  height: 36px;
+  cursor: pointer;
+  z-index: 9999 !important;
+  padding: 0;
+  margin: 0;
+  line-height: 1;
+  text-align: center;
+  filter: drop-shadow(0 0 10px var(--mag)) 
+          drop-shadow(0 0 20px rgba(255, 88, 246, 0.8))
+          contrast(1.2) brightness(1.1);
+  transition: transform 0.2s ease, filter 0.3s ease;
+  pointer-events: auto !important;
+  text-shadow: 0 0 8px var(--mag), 
+               0 0 16px rgba(255, 88, 246, 0.6),
+               2px 0 2px rgba(255, 88, 246, 0.3),
+               -2px 0 2px rgba(0, 255, 255, 0.3);
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
+}
+/* Music note content */
+.slide[data-id="0"] .mute-btn::before {
+  content: '♫';
+  display: block;
+}
+/* Muted state - X on top of music note */
+.slide[data-id="0"] .mute-btn[aria-label="Unmute"]::after {
+  content: '✕';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 28px;
+  color: var(--mag);
+  text-shadow: 0 0 12px var(--mag), 
+               0 0 6px #000,
+               0 0 20px rgba(255, 88, 246, 0.8);
+  font-weight: bold;
+}
+/* Apply same glitch effect to mute button during transition only */
+.slide[data-id="0"].lang-enter .mute-btn {
+  animation: contentGlitchOverlay 0.5s ease-out forwards;
+}
+/* Ensure glow persists after transition */
+.slide[data-id="0"] .mute-btn {
+  filter: drop-shadow(0 0 10px var(--mag)) 
+          drop-shadow(0 0 20px rgba(255, 88, 246, 0.8))
+          contrast(1.2) brightness(1.1) !important;
+}
+.slide[data-id="0"] .mute-btn:hover {
+  transform: scale(1.15);
+  filter: drop-shadow(0 0 12px var(--mag)) 
+          drop-shadow(0 0 24px rgba(255, 88, 246, 1))
+          contrast(1.3) brightness(1.2) !important;
+}
+.slide[data-id="0"] .mute-btn:hover {
+  transform: scale(1.15);
+  filter: drop-shadow(0 0 10px var(--mag)) drop-shadow(0 0 20px rgba(255, 88, 246, 0.8));
+}
+.slide[data-id="0"] .mute-btn:active {
+  transform: scale(0.9);
+}
 
 /* ensure the background sits behind everything and fills the slide */
-.slide[data-id="0"] .bg.pixel-scan-tilt{ z-index:0; inset:0; position:absolute }
-.slide[data-id="0"] .center, .slide[data-id="0"] .center > div{ z-index:3 }
+.slide[data-id="0"] .bg.pixel-scan-tilt{ 
+  z-index:0; 
+  position:absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+}
+.slide[data-id="0"] .center, .slide[data-id="0"] .center > div{ 
+  z-index:3;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
 /* keep header space only for slide 0 (ticker/header area) */
 .slide[data-id="0"] .center{ padding-top:28px }
+/* Apply glitch effect overlay - content stays visible throughout */
+.slide[data-id="0"].lang-enter .center,
+.slide[data-id="0"].lang-enter .title,
+.slide[data-id="0"].lang-enter .btn,
+.slide[data-id="0"].lang-enter .meta {
+  animation: contentGlitchOverlay 0.5s ease-out forwards;
+  opacity: 1 !important;
+}
+/* Force immediate visibility for all content elements */
+.slide[data-id="0"].active .title,
+.slide[data-id="0"].active .btn,
+.slide[data-id="0"].active .btn-row {
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+/* Faster glitch effect that doesn't hide content */
+@keyframes contentGlitchOverlay {
+  0% {
+    filter: brightness(2) contrast(1.5);
+  }
+  20% {
+    filter: brightness(0.7) contrast(1.3);
+  }
+  40% {
+    filter: brightness(1.5) contrast(1.2);
+  }
+  60% {
+    filter: brightness(0.9) contrast(1.1);
+  }
+  80% {
+    filter: brightness(1.1) contrast(1.05);
+  }
+  100% {
+    filter: brightness(1) contrast(1);
+  }
+}
+.slide[data-id="0"] .center > div{ 
+  z-index: 50 !important;
+  pointer-events: auto !important;
+  visibility: visible !important;
+}
+.slide[data-id="0"] .title,
+.slide[data-id="0"] .btn-row,
+.slide[data-id="0"] .btn {
+  visibility: visible !important;
+  display: block !important;
+  opacity: 1 !important;
+  transition: none !important;
+}
+.slide[data-id="0"] .btn-row {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  gap: 12px;
+  width: 100%;
+}
+/* Footer positioned absolutely - no grid */
 
 /* Phone-level CRT disabled — no pseudo-element produced. */
 .phone.crt0::before{ content: none !important; }
