@@ -866,16 +866,6 @@ function populateSlide9(){
   try{ txt = (endingsSource[p] && endingsSource[p][c]) ? endingsSource[p][c] : endingsSource.library.progress; }catch(e){ txt = endingsSource.library.progress; }
   const paragraphs = String(txt).split('\n\n').filter(x=>String(x||'').trim().length>0);
 
-  // Insert typing indicator
-  const typingLi = document.createElement('li'); typingLi.className = 'typing';
-  const tAv = document.createElement('div'); tAv.className = 'avatar';
-  const dotsWrap = document.createElement('div'); dotsWrap.className = 'dots';
-  for(let d=0; d<3; d++){ const dot = document.createElement('span'); dot.className = 'dot'; dotsWrap.appendChild(dot); }
-  typingLi.appendChild(tAv); typingLi.appendChild(dotsWrap);
-  chat.appendChild(typingLi);
-
-  const typingMs = 560;
-
   // helper to wait
   const wait = (ms)=> new Promise(res=>setTimeout(res, ms));
 
@@ -883,10 +873,6 @@ function populateSlide9(){
   // previous ones naturally move up. After all are shown, reveal the button.
   (async function runSequence(){
     try{
-      // small pause showing 'typing...'
-      await wait(typingMs);
-      try{ typingLi.remove(); }catch(_){}
-
       const frame = document.getElementById('slide9Media') || document.querySelector('.slide[data-id="9"] .chat-frame');
 
       for(let i=0;i<paragraphs.length;i++){
