@@ -895,6 +895,11 @@ function populateSlide9(){
         typingIndicator.appendChild(typingDots);
         chat.appendChild(typingIndicator);
         
+        // Scroll to show the typing indicator
+        try{
+          if(frame) frame.scrollTop = frame.scrollHeight;
+        }catch(_){}
+        
         // Wait while "typing"
         await wait(1500);
         
@@ -911,6 +916,11 @@ function populateSlide9(){
 
         // reveal with pop-in
         void bub.offsetWidth; bub.classList.add('visible');
+        
+        // Scroll to show the new message
+        try{
+          if(frame) frame.scrollTop = frame.scrollHeight;
+        }catch(_){}
 
         // allow a tiny settle/reflow so layout measurements are accurate and
         // so the pop-in animation has a moment to run before we nudge layout

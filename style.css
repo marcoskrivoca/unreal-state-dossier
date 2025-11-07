@@ -1748,6 +1748,7 @@ html,body{height:100%;background:var(--bg);margin:0;color:var(--fg);font-family:
   padding: 8px 12px !important;
   opacity: 0.7 !important;
   animation: fadeInTyping 0.3s ease !important;
+  -webkit-animation: fadeInTyping 0.3s ease !important;
 }
 
 .slide[data-id="9"] .typing-text{
@@ -1769,6 +1770,7 @@ html,body{height:100%;background:var(--bg);margin:0;color:var(--fg);font-family:
   border-radius: 50% !important;
   background: var(--cyan) !important;
   animation: dotPulse 1.4s infinite ease-in-out !important;
+  -webkit-animation: dotPulse 1.4s infinite ease-in-out !important;
 }
 
 .slide[data-id="9"] .typing-indicator .dot:nth-child(2){ animation-delay: 0.2s !important; }
@@ -1779,9 +1781,19 @@ html,body{height:100%;background:var(--bg);margin:0;color:var(--fg);font-family:
   to{ opacity: 0.7; transform: translateY(0); }
 }
 
+@-webkit-keyframes fadeInTyping{
+  from{ opacity: 0; -webkit-transform: translateY(10px); }
+  to{ opacity: 0.7; -webkit-transform: translateY(0); }
+}
+
 @keyframes dotPulse{
   0%, 80%, 100%{ opacity: 0.3; transform: scale(0.8); }
   40%{ opacity: 1; transform: scale(1.2); }
+}
+
+@-webkit-keyframes dotPulse{
+  0%, 80%, 100%{ opacity: 0.3; -webkit-transform: scale(0.8); }
+  40%{ opacity: 1; -webkit-transform: scale(1.2); }
 }
 
 /* chat frame: scrollable frame for long messages, with reserved bottom space for button */
