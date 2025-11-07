@@ -891,6 +891,31 @@ function populateSlide9(){
 
       for(let i=0;i<paragraphs.length;i++){
         const para = paragraphs[i];
+        
+        // Show typing indicator before each message
+        const typingIndicator = document.createElement('li'); 
+        typingIndicator.className = 'typing-indicator';
+        const typingText = document.createElement('div');
+        typingText.className = 'typing-text';
+        typingText.textContent = lang === 'es' ? 'ReyCEO escribiendo...' : 'KingCEO typing...';
+        const typingDots = document.createElement('div'); 
+        typingDots.className = 'dots';
+        for(let d=0; d<3; d++){ 
+          const dot = document.createElement('span'); 
+          dot.className = 'dot'; 
+          typingDots.appendChild(dot); 
+        }
+        typingIndicator.appendChild(typingText);
+        typingIndicator.appendChild(typingDots);
+        chat.appendChild(typingIndicator);
+        
+        // Wait while "typing"
+        await wait(1500);
+        
+        // Remove typing indicator
+        try{ typingIndicator.remove(); }catch(_){}
+        
+        // Add the actual message
         const li = document.createElement('li'); li.className = 'msg king';
         const av = document.createElement('div'); av.className = 'avatar'; av.setAttribute('aria-hidden','true');
         const bub = document.createElement('div'); bub.className = 'bubble';
@@ -1478,8 +1503,13 @@ function applySlideTranslations(lang) {
 }
 
 // Initialize language selection
-// Request fullscreen function
+// Request fullscreen function (only works on desktop, not mobile browsers)
 function requestFullscreen() {
+  // Skip on mobile devices as fullscreen API is not supported
+  if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+    return;
+  }
+  
   const elem = document.documentElement;
   if (elem.requestFullscreen) {
     elem.requestFullscreen().catch(err => {
