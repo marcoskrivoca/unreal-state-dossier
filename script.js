@@ -65,7 +65,38 @@ window.clearTransientOverlays = clearTransientOverlays;
 // similar diagnostics again, reinstate a lightweight observer that records add/remove
 // events for transient overlay nodes (.wipe, .flicker, .section-loader, etc.).
 
+// Stop all slide-specific sounds when changing slides
+function stopAllSlideSpecificSounds(){
+  try{
+    // Stop slide-specific sounds (not background music)
+    if(slide01Sound) { slide01Sound.pause(); slide01Sound.currentTime = 0; }
+    if(slide02IntroSound) { slide02IntroSound.pause(); slide02IntroSound.currentTime = 0; }
+    if(slide02TypingSound) { slide02TypingSound.pause(); slide02TypingSound.currentTime = 0; }
+    if(slide03LoadingSound) { slide03LoadingSound.pause(); slide03LoadingSound.currentTime = 0; }
+    if(slide05Sound) { slide05Sound.pause(); slide05Sound.currentTime = 0; }
+    // Note: slide07VoiceSound should continue playing even when leaving slide 7
+    // if(slide07VoiceSound) { slide07VoiceSound.pause(); slide07VoiceSound.currentTime = 0; }
+    if(glitchSound) { glitchSound.pause(); glitchSound.currentTime = 0; }
+    // Note: We don't stop buttonSound, messageNotificationSound, introSound, or slide07VoiceSound as they are either very short
+    // or should continue playing across slide transitions
+  }catch(e){ console.warn('Error stopping slide sounds:', e); }
+}
+
 function goToSlide(id){
+  // Stop any playing slide-specific sounds before changing slides
+  // Exception: don't stop slide05Sound if we're transitioning TO slide 5
+  try{ 
+    if(id !== '5' && id !== 5) {
+      stopAllSlideSpecificSounds(); 
+    } else {
+      // Going to slide 5, stop everything except slide05Sound and slide07VoiceSound
+      if(slide01Sound) { slide01Sound.pause(); slide01Sound.currentTime = 0; }
+      if(slide02IntroSound) { slide02IntroSound.pause(); slide02IntroSound.currentTime = 0; }
+      if(slide02TypingSound) { slide02TypingSound.pause(); slide02TypingSound.currentTime = 0; }
+      if(slide03LoadingSound) { slide03LoadingSound.pause(); slide03LoadingSound.currentTime = 0; }
+      if(glitchSound) { glitchSound.pause(); glitchSound.currentTime = 0; }
+    }
+  }catch(e){}
   // remove any stuck overlays before changing slides so content is visible
   try{ clearTransientOverlays(); }catch(e){}
   document.querySelectorAll('.slide').forEach(s=> s.classList.remove('active'));
@@ -130,6 +161,8 @@ function scanWipeTint(color, next){
 }
 /* black flicker (1â†’2) */
 function flickerTo(next){
+  // Stop any playing slide-specific sounds before transition
+  try{ stopAllSlideSpecificSounds(); }catch(e){}
   // Play glitch sound for flicker effect
   try{ playGlitchSound(); }catch(e){}
   
@@ -187,6 +220,8 @@ function glitchTo(nextId){
   console.log('[GLITCH] glitchTo called with nextId:', nextId);
   return new Promise(res=>{
     try{
+      // Stop any playing slide-specific sounds before transition
+      try{ stopAllSlideSpecificSounds(); }catch(e){}
       // Play glitch sound
       console.log('[GLITCH] Playing glitch sound');
       try{ playGlitchSound(); }catch(e){ console.error('[GLITCH] Sound error:', e); }
@@ -596,9 +631,9 @@ function enterSlide2(){
   const narrative = intro.concat(['']).concat(sysCommon).concat(['']).concat(agreed? tailAgree: tailDis);
   const fullText = narrative.join('\n');
 
-  // much faster typing pace per user's request (22 ms/char)
+  // much faster typing pace per user's request (12 ms/char)
   // Compute an estimated duration for typing and use it as a failsafe
-  const msPerChar = 22;
+  const msPerChar = 12;
   const estimatedMs = Math.max(3000, fullText.length * msPerChar);
   // Cap the failsafe so it doesn't wait forever; give a comfortable buffer
   // so the button doesn't appear before typing completes.
@@ -674,6 +709,20 @@ function enterSlide2(){
 
 /* swipeTo: transition between slides with a horizontal swipe effect */
 function swipeTo(id){
+  // Stop any playing slide-specific sounds before changing slides
+  // Exception: don't stop slide05Sound if we're transitioning TO slide 5
+  try{ 
+    if(id !== '5' && id !== 5) {
+      stopAllSlideSpecificSounds(); 
+    } else {
+      // Going to slide 5, stop everything except slide05Sound and slide07VoiceSound
+      if(slide01Sound) { slide01Sound.pause(); slide01Sound.currentTime = 0; }
+      if(slide02IntroSound) { slide02IntroSound.pause(); slide02IntroSound.currentTime = 0; }
+      if(slide02TypingSound) { slide02TypingSound.pause(); slide02TypingSound.currentTime = 0; }
+      if(slide03LoadingSound) { slide03LoadingSound.pause(); slide03LoadingSound.currentTime = 0; }
+      if(glitchSound) { glitchSound.pause(); glitchSound.currentTime = 0; }
+    }
+  }catch(e){}
   const current = document.querySelector('.slide.active');
   const next = document.querySelector(`.slide[data-id="${id}"]`);
   if(!next) return;
@@ -765,8 +814,11 @@ document.addEventListener('click', (e)=>{
   if(btn.classList.contains('agree')) return onChoice('agree');
   if(btn.classList.contains('disagree')) return onChoice('disagree');
   if(btn.classList.contains('start')){ 
-    try{ playSlide02Sounds(); }catch(e){}
-    return flickerTo(()=>{ goToSlide(2); }); 
+    return flickerTo(()=>{ 
+      goToSlide(2);
+      // Start slide 2 sounds AFTER arriving at slide 2
+      try{ playSlide02Sounds(); }catch(e){}
+    }); 
   }
   if(btn.id==='scanNext'){
     // Play loading sound for slide 2->3 transition
@@ -1590,58 +1642,87 @@ let buttonSound = null;
 let messageNotificationSound = null;
 let glitchSound = null;
 
+// Helper function to check if audio should be muted
+function isMuted() {
+  return bgMusic && bgMusic.muted;
+}
+
+// Helper function to get the correct audio filename based on language
+function getAudioFilename(baseFilename) {
+  const lang = state.lang || 'en';
+  if (lang === 'es') {
+    // Check if Spanish version exists for this file
+    const esFilename = baseFilename.replace('.mp3', '_ES.mp3');
+    // For now, we know these files have Spanish versions:
+    if (baseFilename.includes('slide05') || baseFilename.includes('slide07voice')) {
+      return esFilename;
+    }
+  }
+  return baseFilename;
+}
+
 function initMusic() {
   if (!bgMusic) {
     bgMusic = new Audio('assets/unreal-state-bgs.mp3');
     bgMusic.loop = true;
-    bgMusic.volume = 0.4;
+    bgMusic.volume = 0.36; // 10% lower than original 0.4
     bgMusic.preload = 'auto'; // Preload to reduce gap
   }
   if (!introSound) {
     introSound = new Audio('assets/unreal-state-start.mp3');
-    introSound.volume = 0.4;
+    introSound.volume = 0.36; // 10% lower than original 0.4
     introSound.preload = 'auto';
+    introSound.muted = isMuted();
   }
   if (!slide01Sound) {
     slide01Sound = new Audio('assets/unreal-state-slide01.mp3');
     slide01Sound.volume = 0.4;
     slide01Sound.preload = 'auto';
+    slide01Sound.muted = isMuted();
   }
   if (!slide02IntroSound) {
     slide02IntroSound = new Audio('assets/unreal-state-slide02intro.mp3');
     slide02IntroSound.volume = 0.4;
     slide02IntroSound.preload = 'auto';
+    slide02IntroSound.muted = isMuted();
   }
   if (!slide02TypingSound) {
     slide02TypingSound = new Audio('assets/unreal-state-slide02typing.mp3');
     slide02TypingSound.loop = true;
     slide02TypingSound.volume = 0.3; // Slightly lower for typing sound
     slide02TypingSound.preload = 'auto';
+    slide02TypingSound.muted = isMuted();
   }
   if (!slide03LoadingSound) {
     slide03LoadingSound = new Audio('assets/unreal-state-loadingslide03.mp3');
     slide03LoadingSound.volume = 0.4;
     slide03LoadingSound.preload = 'auto';
+    slide03LoadingSound.muted = isMuted();
   }
   if (!slide07VoiceSound) {
-    slide07VoiceSound = new Audio('assets/unreal-state-slide07voice.mp3');
+    const filename = getAudioFilename('assets/unreal-state-slide07voice.mp3');
+    slide07VoiceSound = new Audio(filename);
     slide07VoiceSound.volume = 0.4;
     slide07VoiceSound.preload = 'auto';
+    slide07VoiceSound.muted = isMuted();
   }
   if (!buttonSound) {
     buttonSound = new Audio('assets/unreal-state-button.mp3');
     buttonSound.volume = 0.3;
     buttonSound.preload = 'auto';
+    buttonSound.muted = isMuted();
   }
   if (!messageNotificationSound) {
     messageNotificationSound = new Audio('assets/unreal-state-messagenotificationslide09.mp3');
     messageNotificationSound.volume = 0.4;
     messageNotificationSound.preload = 'auto';
+    messageNotificationSound.muted = isMuted();
   }
   if (!glitchSound) {
     glitchSound = new Audio('assets/unreal-state-glitch.mp3');
     glitchSound.volume = 0.5;
     glitchSound.preload = 'auto';
+    glitchSound.muted = isMuted();
   }
 }
 
@@ -1665,13 +1746,31 @@ function playMusic() {
 }
 
 function toggleMute() {
+  const isMuted = bgMusic && bgMusic.muted;
+  const newMutedState = !isMuted;
+  
+  // Mute/unmute background music
   if (bgMusic) {
-    bgMusic.muted = !bgMusic.muted;
-    const btn = document.getElementById('muteBtn');
-    if (btn) {
-      // Just update aria-label, CSS handles the visual (♫ with or without X)
-      btn.setAttribute('aria-label', bgMusic.muted ? 'Unmute' : 'Mute');
-    }
+    bgMusic.muted = newMutedState;
+  }
+  
+  // Mute/unmute all sound effects
+  if (introSound) introSound.muted = newMutedState;
+  if (slide01Sound) slide01Sound.muted = newMutedState;
+  if (slide02IntroSound) slide02IntroSound.muted = newMutedState;
+  if (slide02TypingSound) slide02TypingSound.muted = newMutedState;
+  if (slide03LoadingSound) slide03LoadingSound.muted = newMutedState;
+  if (slide05Sound) slide05Sound.muted = newMutedState;
+  if (slide07VoiceSound) slide07VoiceSound.muted = newMutedState;
+  if (buttonSound) buttonSound.muted = newMutedState;
+  if (messageNotificationSound) messageNotificationSound.muted = newMutedState;
+  if (glitchSound) glitchSound.muted = newMutedState;
+  
+  // Update button aria-label
+  const btn = document.getElementById('muteBtn');
+  if (btn) {
+    // Just update aria-label, CSS handles the visual (♫ with or without X)
+    btn.setAttribute('aria-label', newMutedState ? 'Unmute' : 'Mute');
   }
 }
 
@@ -1723,14 +1822,17 @@ function playGlitchSound() {
 
 function playSlide05Sound(which) {
   initMusic();
-  // Create new audio based on location choice
-  const filename = `assets/unreal-state-slide05${which}.mp3`;
+  // Create new audio based on location choice and language
+  const baseFilename = `assets/unreal-state-slide05${which}.mp3`;
+  const filename = getAudioFilename(baseFilename);
   if (slide05Sound) {
     slide05Sound.pause();
     slide05Sound.currentTime = 0;
   }
   slide05Sound = new Audio(filename);
   slide05Sound.volume = 0.4;
+  // Apply current mute state
+  slide05Sound.muted = isMuted();
   slide05Sound.play().catch(err => {
     console.log('Slide 5 sound prevented:', err);
   });
@@ -1738,12 +1840,23 @@ function playSlide05Sound(which) {
 
 function playSlide07VoiceSound() {
   initMusic();
+  
+  // Create new audio based on language (slide07VoiceSound needs to be recreated for different languages)
+  const baseFilename = 'assets/unreal-state-slide07voice.mp3';
+  const filename = getAudioFilename(baseFilename);
+  
   if (slide07VoiceSound) {
+    slide07VoiceSound.pause();
     slide07VoiceSound.currentTime = 0;
-    slide07VoiceSound.play().catch(err => {
-      console.log('Slide 7 voice sound prevented:', err);
-    });
   }
+  
+  slide07VoiceSound = new Audio(filename);
+  slide07VoiceSound.volume = 0.4;
+  slide07VoiceSound.muted = isMuted();
+  
+  slide07VoiceSound.play().catch(err => {
+    console.log('Slide 7 voice sound prevented:', err);
+  });
 }
 
 function playButtonSound() {
@@ -1828,13 +1941,30 @@ window.addEventListener('DOMContentLoaded', () => {
     });
   }
   
-  // Ensure language slide is active on load
+  // Ensure language slide is active on load and completely silent
   const langSlide = document.getElementById('langSlide');
   const slide0 = document.querySelector('.slide[data-id="0"]');
   
   if (langSlide && slide0) {
     langSlide.classList.add('active');
     slide0.classList.remove('active');
+    
+    // Ensure complete silence on language slide - stop any sounds that might be playing
+    try {
+      if (bgMusic) { bgMusic.pause(); bgMusic.currentTime = 0; }
+      if (introSound) { introSound.pause(); introSound.currentTime = 0; }
+      if (slide01Sound) { slide01Sound.pause(); slide01Sound.currentTime = 0; }
+      if (slide02IntroSound) { slide02IntroSound.pause(); slide02IntroSound.currentTime = 0; }
+      if (slide02TypingSound) { slide02TypingSound.pause(); slide02TypingSound.currentTime = 0; }
+      if (slide03LoadingSound) { slide03LoadingSound.pause(); slide03LoadingSound.currentTime = 0; }
+      if (slide05Sound) { slide05Sound.pause(); slide05Sound.currentTime = 0; }
+      if (slide07VoiceSound) { slide07VoiceSound.pause(); slide07VoiceSound.currentTime = 0; }
+      if (buttonSound) { buttonSound.pause(); buttonSound.currentTime = 0; }
+      if (messageNotificationSound) { messageNotificationSound.pause(); messageNotificationSound.currentTime = 0; }
+      if (glitchSound) { glitchSound.pause(); glitchSound.currentTime = 0; }
+    } catch(e) {
+      console.warn('Error ensuring silence on language slide:', e);
+    }
   }
   
   // Mute button event listener
@@ -1850,8 +1980,15 @@ window.addEventListener('DOMContentLoaded', () => {
   
   // Play glitch sound every 20 seconds, starting at the 91% mark
   // First glitch happens at 18.2s, then every 20s after that
+  // BUT NOT on the language selection slide
   let glitchTimer = setTimeout(function playPeriodicGlitch() {
-    try{ playGlitchSound(); }catch(err){}
+    // Don't play glitch sound if we're still on the language slide
+    const langSlide = document.getElementById('langSlide');
+    const isOnLanguageSlide = langSlide && langSlide.classList.contains('active');
+    
+    if (!isOnLanguageSlide) {
+      try{ playGlitchSound(); }catch(err){}
+    }
     // Schedule next glitch in 20 seconds
     glitchTimer = setTimeout(playPeriodicGlitch, glitchInterval);
   }, glitchTiming);
