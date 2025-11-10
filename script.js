@@ -933,6 +933,18 @@ document.addEventListener('click', (e)=>{
     try{ window.open(url, '_blank'); showLog(['OPEN: spotify']); }catch(e){ showLog(['Unable to open link']); }
     return;
   }
+  if(btn.id === 'slide10Workshop'){
+    const lang = state.lang || 'en';
+    const url = LANG[lang].slide10.workshopUrl;
+    try{ window.open(url, '_blank'); showLog(['OPEN: workshop proposal']); }catch(e){ showLog(['Unable to open link']); }
+    return;
+  }
+  if(btn.id === 'slide10Mockups'){
+    const lang = state.lang || 'en';
+    const url = LANG[lang].slide10.mockupsUrl;
+    try{ window.open(url, '_blank'); showLog(['OPEN: app mockups']); }catch(e){ showLog(['Unable to open link']); }
+    return;
+  }
   if(!btn) return;
   if(btn.id === 'slide9Restart'){
     // clear choices and go back to slide 0
@@ -1274,7 +1286,11 @@ const LANG = {
       contact: 'Contact information',
       btnTop: 'go back to the top',
       btnNice: 'take me somewhere nice',
-      btnNiceUrl: 'https://open.spotify.com/intl-es/track/1x5sYLZiu9r5E43kMlt9f8?si=1b4cea68c83a49af'
+      btnNiceUrl: 'https://open.spotify.com/intl-es/track/1x5sYLZiu9r5E43kMlt9f8?si=1b4cea68c83a49af',
+      btnWorkshop: 'workshop proposal',
+      btnMockups: 'app mockups',
+      workshopUrl: 'https://drive.google.com/file/d/1B4tfoRFxMv_fba2_qB4Fp7osUkw4wnvd/view?usp=drive_link',
+      mockupsUrl: 'https://drive.google.com/file/d/1AJRrgoRjv2aOLV55k59gSUxun5fuNcxg/view?usp=drive_link'
     },
     slide6: {
       title: 'conceptual framework',
@@ -1410,7 +1426,11 @@ const LANG = {
       contact: 'Contacto',
       btnTop: 'volver al inicio',
       btnNice: 'llévame a un lugar mejor',
-      btnNiceUrl: 'https://open.spotify.com/intl-es/track/3kycJJLBAAeMaujoWDqCd8?si=e6ab89e0c3d94d05'
+      btnNiceUrl: 'https://open.spotify.com/intl-es/track/3kycJJLBAAeMaujoWDqCd8?si=e6ab89e0c3d94d05',
+      btnWorkshop: 'propuesta de workshop',
+      btnMockups: 'app mockups',
+      workshopUrl: 'https://drive.google.com/file/d/1rYI4eNSeob-VVRRMoyXxY0vJmrpt0KkW/view?usp=drive_link',
+      mockupsUrl: 'https://drive.google.com/file/d/1AJRrgoRjv2aOLV55k59gSUxun5fuNcxg/view?usp=drive_link'
     },
     slide6: {
       title: 'marco conceptual',
@@ -1504,6 +1524,8 @@ function applyLanguage(lang) {
   const slide10Contact = document.querySelector('.slide[data-id="10"] .body p:first-child');
   const slide10Top = document.getElementById('slide10Top');
   const slide10Nice = document.getElementById('slide10Nice');
+  const slide10Workshop = document.getElementById('slide10Workshop');
+  const slide10Mockups = document.getElementById('slide10Mockups');
   
   if (slide10Title) slide10Title.textContent = t.slide10.title;
   if (slide10MainTitle) slide10MainTitle.textContent = t.slide10.mainTitle;
@@ -1516,6 +1538,8 @@ function applyLanguage(lang) {
       window.open(t.slide10.btnNiceUrl, '_blank');
     });
   }
+  if (slide10Workshop) slide10Workshop.textContent = t.slide10.btnWorkshop;
+  if (slide10Mockups) slide10Mockups.textContent = t.slide10.btnMockups;
   
   // Apply slide-specific translations
   applySlideTranslations(lang);
