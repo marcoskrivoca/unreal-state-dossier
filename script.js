@@ -1020,7 +1020,7 @@ function populateSlide9(){
         typingIndicator.className = 'typing-indicator';
         const typingText = document.createElement('div');
         typingText.className = 'typing-text';
-        typingText.textContent = lang === 'es' ? 'ReyCEO escribiendo...' : 'KingCEO typing...';
+        typingText.textContent = lang === 'es' ? 'App escribiendo...' : 'App typing...';
         const typingDots = document.createElement('div'); 
         typingDots.className = 'dots';
         for(let d=0; d<3; d++){ 
@@ -1234,21 +1234,21 @@ const LANG = {
       wantUrl: 'https://www.amazon.com/s?k=stuff',
       flightUrl: 'https://www.google.com/travel/flights',
       title: 'concept',
-      lead: `What if I told you I know what you <span class="typing-cyan">want</span> before you know it?`,
-      para1: `unreal state is an <span class="typing-mag">immersive</span> urban performance disguised as a role-playing game. Participants move alone through the city as fictional characters, guided by a mobile app that speaks in the voice of the <span class="typing-cyan">King CEO</span>, an <span class="typing-ylw">algorithmic</span> figure that claims to know players' desires in advance. The city becomes a game board where common urban spaces such as parks, schools, cemeteries, and construction sites serve as narrative checkpoints.`,
-      para2: `Along the way, each player receives a printed choose your own adventure booklet, offering <span class="typing-mag">analog detours</span> that resist the logic of the system. The story unfolds through individual actions and encounters, but the outcome is revealed <span class="typing-cyan">collectively</span> in a final scene from a high point in the city, where players see the full map for the first time.`,
-      para3: `Blending <span class="typing-ylw">digital control</span> with performative agency, unreal state reflects on how <span class="typing-mag">algorithms</span>, speculation, and corporate systems shape contemporary urban life.`,
-      btnWant: "ok, let's see, what do i want?",
+      lead: `What if a dying app from the future arrived on your phone and asked you to find someone who is lost?`,
+      para1: `unreal state is an <span class="typing-mag">immersive</span> urban performance disguised as an app. Ten players receive a strange program on their phones, a program that should not exist, leaking from a collapsing digital future. The app says: someone is lost. Help me find them. It guides you through the city, giving you absurd choices that seed different timelines of the lost person's life.`,
+      para2: `The app started as a real estate tool. It helped people find places to live. As the world collapsed, the program absorbed governance, resource allocation, identity. There was not enough space in the real state, so we had to move to the <span class="typing-cyan">unreal state</span>. The voice guiding your search is the person you are looking for. It just does not know it yet.`,
+      para3: `Two hours. Any city. The phone becomes the opposite of what it usually is: instead of pulling you inward into the scroll, it pushes you <span class="typing-mag">outward</span>. Into the street. Into the weather. Into the face of someone you have never met.`,
+      btnWant: 'this is boring, show me something fun',
       btnContinue: 'i want to continue with the dossier'
     },
     slide4: {
-      title: 'game mechanics',
-      mainTitle: 'game mechanics',
-      para1: `The experience is designed for up to <span class="typing-ylw">thirty participants</span> per session. Each player begins from a different point in the city, embodying a unique fictional character inspired by recognizable archetypes such as tenants, developers, tourists, activists, or bureaucrats.`,
-      para2: `Each participant follows a path made up of eleven urban scenes, across flexible locations like libraries, schools, plazas, cemeteries, and construction sites. Players move independently, guided by a <span class="typing-cyan">mobile app</span> that activates content based on their location and decisions. The structure creates the <span class="typing-mag">illusion of freedom</span> while subtly revealing a closed system beneath it.`,
-      para3: `Although each journey is individual, the experience includes scenes shared with others and <span class="typing-cyan">synchronized events</span> that affect all participants. Players navigate the city as if playing against the app itself, testing its <span class="typing-ylw">control</span>.`,
-      para4: `In parallel, each carries a <span class="typing-mag">printed booklet</span> with optional narrative detours. In the final scene, everyone gathers at a high point in the city where the <span class="typing-cyan">collective result</span> of their actions is revealed.`,
-      para5: 'To give you a silly example, choose one:',
+      title: 'mechanics',
+      mainTitle: 'mechanics',
+      para1: `The experience is designed for <span class="typing-ylw">ten players</span> per session. Each one receives the app and is asked where they would like to start looking for the lost person. The map opens up and six possible destinations appear, each representing an archetype of what moves the city and humanity forward: a museum (knowledge), a supermarket (consumerism), a church (religion), a bank (financial aid), a police station (security and law), or staying still (waiting and doing nothing).`,
+      para2: `By going to this first location, the player meets their <span class="typing-cyan">companion voice</span>, an uploaded intelligence transformed into an archetype. This voice challenges the player into combat. Once defeated, the player chooses whether to let this voice join their path. Each destination builds a different version of the lost person, letting us play with constructing that character inside the player's head.`,
+      para3: `Although each journey is individual, players meet <span class="typing-mag">face to face</span> for a guided conversation with another player. Sandbox chapters open up several options on the map regarding sidequests and tasks, while the Unreal State charges tolls for movement, because the real estate app never stopped charging <span class="typing-ylw">rent on reality</span>.`,
+      para4: `In the final scene, everyone gathers at a high point in the city for a philosophical <span class="typing-cyan">boss fight</span> against THE SAME, a psychoelectromagnetic goddess who offers permanence. She weakens when players respond differently. To completely destroy her: <span class="typing-mag">uninstall the app</span>.`,
+      para5: 'Let me give you an example. Where would you like to go now?',
       btnLibrary: 'Library',
       btnCemetery: 'Cemetery',
       btnMuseum: 'Museum'
@@ -1294,8 +1294,8 @@ const LANG = {
     },
     slide6: {
       title: 'conceptual framework',
-      para1: `unreal state stages a world shaped by <span class="typing-cyan">algorithmic governance</span> and the collapse of collective fictions. It unfolds within the infrastructures that now host power and spectacle. Guided by the <span class="typing-ylw">King CEO</span>, a voice that merges technocratic authority with monarchical seduction, the experience draws on imaginaries proposed by Curtis Yarvin and Nick Land, where democracy is replaced by <span class="typing-mag">streamlined control</span>. This performance uses the same devices that shape contemporary behavior. It explores how interactive media and mobile technologies have become new rehearsal spaces for obedience.`,
-      para2: `As Benjamin Bratton suggests in The Stack, <span class="typing-cyan">planetary-scale computation</span> operates across layers. unreal state turns these layers into <span class="typing-ylw">narrative space</span>. Participants navigate a system that observes, anticipates, and absorbs their decisions. But within that structure, something else begins to form. Not escape, but <span class="typing-mag">rhythm, friction, or pause</span>.`,
+      para1: `unreal state makes people try to live the life of a <span class="typing-mag">bot voice</span>, to understand that the relationship between us and our phones is as <span class="typing-ylw">horrific as it is beautiful</span>. From the disruption of western democracies and the rise of the far right across the hemisphere, to the branding of our clothes, our food, our entertainment, our complete interdependence with franchise corporations. Part of the game is showcasing this to the player as something set, and then playing with them to disarm it.`,
+      para2: `THE SAME is not evil, and it is not inevitable, but it is <span class="typing-cyan">coming</span>. The device that made every city look the same is the device we use to make them different again. Not by smashing it, not by worshipping it, but by <span class="typing-mag">repurposing it</span>. The app pushes you outward: into the street, into strangers, into the stubborn differences that exist.`,
       para3: `Shall we continue?`,
       btnYes: 'yes',
       btnNo: 'no'
@@ -1374,21 +1374,21 @@ const LANG = {
       wantUrl: 'https://www.amazon.es/s?k=cosas',
       flightUrl: 'https://www.google.com/travel/flights?hl=es',
       title: 'concepto',
-      lead: `¿Y si te dijera que sé lo que <span class="typing-cyan">quieres</span> antes de que tú lo sepas?`,
-      para1: `unreal state es una performance urbana <span class="typing-mag">inmersiva</span> disfrazada de juego de rol. Los participantes se mueven solos por la ciudad como personajes ficticios, guiados por una app móvil que habla con la voz del <span class="typing-cyan">Rey CEO</span>, una figura <span class="typing-ylw">algorítmica</span> que afirma conocer los deseos de los jugadores de antemano. La ciudad se convierte en un tablero de juego donde espacios urbanos comunes como parques, escuelas, cementerios y sitios de construcción sirven como puntos de control narrativos.`,
-      para2: `En el camino, cada jugador recibe un cuadernillo impreso tipo "elige tu propia aventura", ofreciendo <span class="typing-mag">desvíos analógicos</span> que resisten la lógica del sistema. La historia se despliega a través de acciones individuales y encuentros, pero el resultado se revela <span class="typing-cyan">colectivamente</span> en una escena final desde un punto alto de la ciudad, donde los jugadores ven el mapa completo por primera vez.`,
-      para3: `Mezclando <span class="typing-ylw">control digital</span> con agencia performativa, unreal state reflexiona sobre cómo <span class="typing-mag">algoritmos</span>, especulación y sistemas corporativos dan forma a la vida urbana contemporánea.`,
-      btnWant: 'ok, a ver, ¿qué quiero?',
+      lead: `¿Y si una app moribunda del futuro llegara a tu teléfono pidiéndote que encuentres a alguien que está perdido?`,
+      para1: `unreal state es una performance urbana <span class="typing-mag">inmersiva</span> disfrazada de app. Diez jugadores reciben un programa extraño en sus teléfonos, un programa que no debería existir, filtrándose de un futuro digital colapsado. La app dice: alguien está perdido. Ayúdame a encontrarlo. Te guía a través de la ciudad, dándote opciones absurdas que siembran diferentes líneas de tiempo de la vida de la persona perdida.`,
+      para2: `La app comenzó como una herramienta de bienes raíces. Ayudaba a las personas a encontrar lugares para vivir. Cuando el mundo se colapsó, el programa absorbió gobernanza, asignación de recursos, identidad. No había suficiente espacio en el estado real, así que tuvimos que mudarnos al <span class="typing-cyan">estado irreal</span>. La voz que guía tu búsqueda es la persona que estás buscando. Simplemente aún no lo sabe.`,
+      para3: `Dos horas. Cualquier ciudad. El teléfono se convierte en lo opuesto a lo que usualmente es: en lugar de jalarte hacia adentro en la pantalla, te empuja <span class="typing-mag">hacia afuera</span>. A la calle. Al clima. A la cara de alguien que nunca has conocido.`,
+      btnWant: 'esto es aburrido, muéstrame algo divertido',
       btnContinue: 'quiero continuar con el dossier'
     },
     slide4: {
-      title: 'mecánicas de juego',
-      mainTitle: 'mecánicas de juego',
-      para1: `La experiencia está diseñada para hasta <span class="typing-ylw">treinta participantes</span> por sesión. Cada jugador comienza desde un punto diferente de la ciudad, encarnando un personaje ficticio único inspirado en arquetipos reconocibles como inquilinos, desarrolladores, turistas, activistas o burócratas.`,
-      para2: `Cada participante sigue un camino compuesto por once escenas urbanas, a través de ubicaciones flexibles como bibliotecas, escuelas, plazas, cementerios y sitios de construcción. Los jugadores se mueven de forma independiente, guiados por una <span class="typing-cyan">app móvil</span> que activa contenido basado en su ubicación y decisiones. La estructura crea la <span class="typing-mag">ilusión de libertad</span> mientras revela sutilmente un sistema cerrado debajo.`,
-      para3: `Aunque cada viaje es individual, la experiencia incluye escenas compartidas con otros y <span class="typing-cyan">eventos sincronizados</span> que afectan a todos los participantes. Los jugadores navegan la ciudad como si jugaran contra la app misma, probando su <span class="typing-ylw">control</span>.`,
-      para4: `En paralelo, cada uno lleva un <span class="typing-mag">cuadernillo impreso</span> con desvíos narrativos opcionales. En la escena final, todos se reúnen en un punto alto de la ciudad donde se revela el <span class="typing-cyan">resultado colectivo</span> de sus acciones.`,
-      para5: 'Para darte un ejemplo tonto, elige uno:',
+      title: 'mecánicas',
+      mainTitle: 'mecánicas',
+      para1: `La experiencia está diseñada para <span class="typing-ylw">diez jugadores</span> por sesión. Cada uno recibe la app y se le pregunta dónde le gustaría comenzar a buscar a la persona perdida. El mapa se abre y aparecen seis posibles destinos, cada uno representando un arquetipo de lo que mueve la ciudad y la humanidad hacia adelante: un museo (conocimiento), un supermercado (consumismo), una iglesia (religión), un banco (ayuda financiera), una estación de policía (seguridad y ley), o quedarse quieto (esperar y no hacer nada).`,
+      para2: `Al ir a esta primera ubicación, el jugador conoce su <span class="typing-cyan">voz compañera</span>, una inteligencia subida transformada en un arquetipo. Esta voz desafía al jugador a un combate. Una vez derrotada, el jugador elige si dejar que esta voz se una a su camino. Cada destino construye una versión diferente de la persona perdida, permitiéndonos jugar con la construcción de ese personaje dentro de tu cabeza.`,
+      para3: `Aunque cada viaje es individual, los jugadores se encuentran <span class="typing-mag">cara a cara</span> para una conversación guiada con otro jugador. Los capítulos sandbox abren varias opciones en el mapa con respecto a misiones secundarias y tareas, mientras que el Estado Irreal cobra peajes por movimiento, porque la app de bienes raíces nunca dejó de cobrar <span class="typing-ylw">renta sobre la realidad</span>.`,
+      para4: `En la escena final, todos se reúnen en un punto alto de la ciudad para un <span class="typing-cyan">combate de jefe</span> filosófico contra LA MISMA, una diosa psicoeléctromagnética que ofrece permanencia. Se debilita cuando los jugadores responden diferentemente. Para destruirla completamente: <span class="typing-mag">desinstala la app</span>.`,
+      para5: 'Déjame darte un ejemplo. ¿A dónde quieres ir ahora?',
       btnLibrary: 'Biblioteca',
       btnCemetery: 'Cementerio',
       btnMuseum: 'Museo'
@@ -1434,8 +1434,8 @@ const LANG = {
     },
     slide6: {
       title: 'marco conceptual',
-      para1: `unreal state escenifica un mundo moldeado por la <span class="typing-cyan">gobernanza algorítmica</span> y el colapso de las ficciones colectivas. Se despliega dentro de las infraestructuras que ahora albergan poder y espectáculo. Guiado por el <span class="typing-ylw">Rey CEO</span>, una voz que fusiona autoridad tecnocrática con seducción monárquica, la experiencia se inspira en imaginarios propuestos por Curtis Yarvin y Nick Land, donde la democracia es reemplazada por <span class="typing-mag">control optimizado</span>. Esta performance usa los mismos dispositivos que moldean el comportamiento contemporáneo. Explora cómo los medios interactivos y las tecnologías móviles se han convertido en nuevos espacios de ensayo para la obediencia.`,
-      para2: `Como sugiere Benjamin Bratton en The Stack, la <span class="typing-cyan">computación a escala planetaria</span> opera a través de capas. unreal state convierte estas capas en <span class="typing-ylw">espacio narrativo</span>. Los participantes navegan un sistema que observa, anticipa y absorbe sus decisiones. Pero dentro de esa estructura, algo más comienza a formarse. No escape, sino <span class="typing-mag">ritmo, fricción o pausa</span>.`,
+      para1: `unreal state hace que las personas intenten vivir la vida de una <span class="typing-mag">voz bot</span>, para entender que la relación entre nosotros y nuestros teléfonos es tan <span class="typing-ylw">horrible como hermosa</span>. Desde la disrupción de las democracias occidentales y el auge de la extrema derecha en todo el hemisferio, hasta la marca de nuestra ropa, nuestra comida, nuestro entretenimiento, nuestra interdependencia completa con corporaciones de franquicia. Parte del juego es mostrar esto al jugador como algo establecido, y luego jugar con ellos para desarmarlo.`,
+      para2: `LA MISMA no es malvada, y no es inevitable, pero está <span class="typing-cyan">llegando</span>. El dispositivo que hizo que cada ciudad se viera igual es el dispositivo que usamos para hacerlas diferentes de nuevo. No rompiéndolo, no adorándolo, sino <span class="typing-mag">reasignándolo</span>. La app te empuja hacia afuera: a la calle, a extraños, a las diferencias obstinadas que existen.`,
       para3: `¿Continuamos?`,
       btnYes: 'sí',
       btnNo: 'no'
