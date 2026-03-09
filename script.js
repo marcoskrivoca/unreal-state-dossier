@@ -939,6 +939,12 @@ document.addEventListener('click', (e)=>{
     try{ window.open(url, '_blank'); showLog(['OPEN: workshop proposal']); }catch(e){ showLog(['Unable to open link']); }
     return;
   }
+  if(btn.id === 'slide10Mockups'){
+    const lang = state.lang || 'en';
+    const url = LANG[lang].slide10.mockupsUrl;
+    try{ window.open(url, '_blank'); showLog(['OPEN: app mockups']); }catch(e){ showLog(['Unable to open link']); }
+    return;
+  }
   if(!btn) return;
   if(btn.id === 'slide9Restart'){
     // clear choices and go back to slide 0
@@ -1519,6 +1525,7 @@ function applyLanguage(lang) {
   const slide10Top = document.getElementById('slide10Top');
   const slide10Nice = document.getElementById('slide10Nice');
   const slide10Workshop = document.getElementById('slide10Workshop');
+  const slide10Mockups = document.getElementById('slide10Mockups');
   
   if (slide10Title) slide10Title.textContent = t.slide10.title;
   if (slide10MainTitle) slide10MainTitle.textContent = t.slide10.mainTitle;
@@ -1532,6 +1539,7 @@ function applyLanguage(lang) {
     });
   }
   if (slide10Workshop) slide10Workshop.textContent = t.slide10.btnWorkshop;
+  if (slide10Mockups) slide10Mockups.textContent = t.slide10.btnMockups;
   
   // Apply slide-specific translations
   applySlideTranslations(lang);
